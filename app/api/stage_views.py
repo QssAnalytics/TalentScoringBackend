@@ -35,9 +35,10 @@ class StageQuestionApiView(APIView):
 class StageQuestionViewSet(ViewSet):
     queryset = Stage.objects.all()
 
+    @database_debug
     def list(self, request, slug):
-        item = Stage.objects.filter(slug=slug)
-        
+        # item = Stage.objects.prefetch_related('questions__answers').filter(slug=slug).order_by('questions__id')
+        item = Stage.objects.prefetch_related('questions__answers').filter(slug=slug)
         serializer = StageQuestionListSerializer(item, many = True)
 
         return Response(serializer.data)

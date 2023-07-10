@@ -1,28 +1,33 @@
-[
+{
+  "Tehsil merhelesi": [
     {
-      "id": 1,
-      "question": "dsdsdssd?",
-      "answers": {
-        "0": [
-          {
-            "id": 1,
-            "answer": "tehsil alitem"
-          },
-          {
-            "id": 2,
-            "answer": "sen necesen?"
-          }
-        ],
-        "1": [
-          {
-            "id": 1,
-            "answer": "what are?"
-          },
-          {
-            "id": 2,
-            "answer": "so you?"
-          }
-        ]
-      }
+      "Umumi suallar": [
+        {
+          "question": "question1",
+          "answer": "answer1",
+          "weight": 10
+        },
+        {
+          "question": "question2",
+          "answer": "answer2",
+          "weight": 10
+        }
+      ]
+    },
+    
+    {
+      "Orta texniki": [
+        {
+          "question": "question3",
+          "answer": "answer3",
+          "weight": 10
+        },
+        {
+          "question": "question4",
+          "answer": "answer4",
+          "weight": 10
+        }
+      ]
     }
   ]
+}
