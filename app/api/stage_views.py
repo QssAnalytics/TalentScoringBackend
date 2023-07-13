@@ -28,6 +28,7 @@ class StageQuestionApiView(APIView):
     def get(self, request, slug):
 
         stage = Stage.objects.filter(slug=slug)
+        
         serializer =  StageQuestionListSerializer(stage, many = True)
 
         return Response(serializer.data)

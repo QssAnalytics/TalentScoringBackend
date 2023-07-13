@@ -3,10 +3,10 @@ from app import models
 
 class AnswerListSerializer(serializers.ModelSerializer):
     
-    stage_fit = serializers.CharField(source = 'get_stage_slug')
+    #stage_fit = serializers.CharField(source = 'get_stage_slug')
     class Meta:
         model = models.Answer
-        exclude = ["questionIdd", "created_at", "updated_at"]
+        exclude = ["questionIdd", "created_at", "updated_at", "stage_fit"]
 
 
 

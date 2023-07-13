@@ -30,7 +30,10 @@ class Answer(models.Model):
             return self.stage_fit.slug
         return None
     def __str__(self):
-        return "answer={};  question={}".format(self.answer_title, self.questionIdd)
+        if self.questionIdd_id:
+            return "answer={}; question={}".format(self.answer_title, self.questionIdd.question_title)
+        else:
+            return "answer={}; question=None".format(self.answer_title)
     
 class Question(models.Model):
 
@@ -41,7 +44,7 @@ class Question(models.Model):
     question_dependens_on_answer = models.ForeignKey('app.Answer', related_name = 'questions', blank=True,null=True, on_delete=models.CASCADE)
     question_type = models.CharField(max_length=50, blank=True, null=True)
     question_dependens_on_question = models.ForeignKey('self', blank=True, null=True, related_name='question_depend', on_delete=models.CASCADE)
-
+    stage_index = models.IntegerField(blank=True, null=True)
     class Meta:
         verbose_name = 'Question'
         verbose_name_plural = 'Questions'
@@ -125,7 +128,4 @@ class UserAccount(AbstractBaseUser):
         
         return self.username
 
-# class UserResult(models.Model):
-#     user=models.OneToOneField('app.UserAccount', on_delete=models.CASCADE)
-#     work_experience = models.BooleanField(default=False)
 

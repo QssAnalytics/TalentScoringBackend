@@ -30,7 +30,6 @@ class StageParentListSerializer(serializers.ModelSerializer):
     def get_child_count(self,obj):
         return obj.stage_children.count()
 
-
 class StageChildListSerializer(serializers.ModelSerializer):
 
     class Meta:
