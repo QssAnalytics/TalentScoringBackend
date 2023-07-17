@@ -1,11 +1,14 @@
+import math
 from django.shortcuts import render
 from django.contrib.auth import authenticate, login
 from django.middleware import csrf
+from rest_framework.views import APIView
 from rest_framework import exceptions as rest_exceptions, response, decorators as rest_decorators, permissions as rest_permissions
 from rest_framework_simplejwt import tokens, views as jwt_views, serializers as jwt_serializers, exceptions as jwt_exceptions
 from drf_yasg.utils import swagger_auto_schema
 from django.conf import settings
 from app import models
+from app.helpers.user_helpers import get_education_score
 from pprint import pprint
 
 from app.serializers import user_serializers
@@ -134,3 +137,10 @@ def user(request):
 
     serializer = user_serializers.UserAccountSerializer(user)
     return response.Response(serializer.data)
+
+
+
+class UserScoreApiView(APIView):
+    def get(self, request, username):
+        user, tehsil_score = get_education_score(models.UserAccount, username)
+        return response.Response({"user-info":user.user_info,"tehsil_score":tehsil_score})
