@@ -1,33 +1,68 @@
-{
-  "Tehsil merhelesi": [
-    {
-      "Umumi suallar": [
+[
+  {"name":"umumi-suallar",
+    "formData":{
+      "firstName":"Fuad",
+      "lastName":"Bayramov",
+      "workExp":"1",
+      "curOccupation":{"id":6,
+      "answer":"Təhsil alıram və çalışıram",
+      "answer_weight":0.5},
+      "education":[
         {
-          "bachelorer": "question1",
-          "answer": "answer1",
-          "weight": 10
+          "bachelor":{
+            "id":11,
+            "answer":"Bakalavr",
+            "answer_weight":0.35
+          }
         },
         {
-          "question": "question2",
-          "answer": "answer2",
-          "weight": 10
-        }
-      ]
-    },
-    
-    {
-      "Orta texniki": [
-        {
-          "question": "question3",
-          "answer": "answer3",
-          "weight": 10
+          "master":{
+            "answer": "Magistr",
+            "answer_weight":0.07
+          }
         },
         {
-          "question": "question4",
-          "answer": "answer4",
-          "weight": 10
+          "phd":{
+            "answer":"phd",
+            "answer_weight":0.0007
+          }
         }
-      ]
+      ],
+      "educationGrant":{
+        "id":15,
+        "answer":"Zərbəçi",
+        "answer_weight":0.3}
     }
-  ]
-}
+  },
+  {"name":"orta-texniki-ve-ali-tehsil-suallari",
+    "formData":{"vocationalScore":"",
+      "bachelorsScore":{
+        "score":456,
+        "answer_weight":0.5
+      },
+      "masterScore":{
+        "score":70,
+        "answer_weight":0.25
+      },
+      "phdScore":{
+        "score":81,
+        "answer_weight":0.25
+        
+      }}},
+  {"name":"olimpiada-suallar",
+    "formData":{
+      "wonOlympics":"1",
+      "subjectOlympiad":{
+        "id":0,"answer":""
+      },
+      "highestOlympiad":{
+        "id":0,"answer":"Respublika",
+        "answer_weight":0.001
+      },
+      "rankOlympiad":{
+        "id":0,"answer":"2-ci yer",
+        "answer_weight":0.2
+      }
+    }
+  }
+]

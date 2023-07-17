@@ -143,4 +143,9 @@ def user(request):
 class UserScoreApiView(APIView):
     def get(self, request, username):
         user, tehsil_score = get_education_score(models.UserAccount, username)
-        return response.Response({"user-info":user.user_info,"tehsil_score":tehsil_score})
+        tehsil_score_exists = any("tehsil_score" in item for item in user.user_info)
+        if not tehsil_score_exists:
+            user.user_info.append({"tehsil_score":tehsil_score})
+            user.save()
+            return response.Response({"user-info":user.user_info})
+        return response.Response({"user-info":user.user_info})
