@@ -12,7 +12,7 @@ DATABASES = {
 CORS_ALLOWED_ORIGINS = [
     'https://talentscoringbackend-production.up.railway.app',
     'http://localhost:3000',
-    'http://localhost:51774',
+    'http://localhost:5174',
     'http://127.0.0.1:5173',
     'http://localhost:5173',
     'https://talent-scoring-frontend.vercel.app',
@@ -29,7 +29,7 @@ CSRF_TRUSTED_ORIGINS = [
     'http://localhost:3000/',
     'http://127.0.0.1:5173/',
     'http://localhost:5173/',
-    'http://localhost:51774',
+    'http://localhost:5174',
     'https://talent-scoring-frontend.vercel.app/',
     'https://talent-scoring-frontend-fikaroo.vercel.app/',
     'https://talent-scoring-frontend-git-main-fikaroo.vercel.app/',
