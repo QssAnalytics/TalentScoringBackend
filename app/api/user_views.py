@@ -153,12 +153,10 @@ def user(request):
 
 
 class UserScoreApiView(APIView):
-    def get(self, request, username):
-        user = models.UserAccount.objects.filter(username = username).first()
-        user, tehsil_score = get_education_score(user)
-
-        
-        userbla = get_experience_score(user)
+    async def get(self, request, username):
+        user = await models.UserAccount.objects.afilter(username = username).aonly("username", "user_info").afirst()
+        tehsil_score = await get_education_score(user)
+        experiance_score = await get_experience_score(user)
         # user.user_info.append({"tehsil_score":tehsil_score})
         # user.save()
-        return response.Response({"user-info":user.user_info, "tehsil_score":tehsil_score})
+        return response.Response({"user-info":user.user_info, "tehsil_score":tehsil_score, "experiance_score":experiance_score})

@@ -36,11 +36,13 @@ INSTALLED_APPS = [
     'drf_yasg',
     'drf_spectacular',
     'debug_toolbar',
+    'asgiref',
     'app',
 
 ]
 
 MIDDLEWARE = [
+    # 'asgiref.contrib.django.middleware.AsyncToSyncMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     "debug_toolbar.middleware.DebugToolbarMiddleware",
     'django.middleware.security.SecurityMiddleware',

@@ -7,7 +7,7 @@ from django.contrib.auth import get_user_model
 UserAccount = get_user_model()
 user_account_type = TypeVar('user_account_type', bound=UserAccount)
 
-def get_education_score(user: user_account_type):
+async def get_education_score(user: user_account_type):
         # start_time = time.time()
         tehsil_score = 0
         
@@ -42,12 +42,12 @@ def get_education_score(user: user_account_type):
             )
         ) * 100        
         tehsil_score = np.round(tehsil_score,8)
-        return user, tehsil_score
+        return tehsil_score
 
 def get_language_score():
         pass
 
-def get_experience_score(user: user_account_type):
+async def get_experience_score(user: user_account_type):
         workingform = {"Fiziki əmək":1, "Sənət":2, "Ali ixtisas":3, "Sahibkar":4}
         max_working_form_weight = 0
         profession_degree_weight = 0
@@ -67,6 +67,19 @@ def get_experience_score(user: user_account_type):
                                 end_date = datetime.strptime(data["endDate"], "%Y-%m-%d")
                                 difference = end_date - start_date
         finnly_date = difference.days/365.25
-        print(max_working_form_weight*profession_degree_weight)
+        if 0 <= finnly_date < 1:
+                finnly_date_weight = 0.9
+        elif 1 <= finnly_date < 3:
+                finnly_date_weight = 0.7
+        elif 3 <= finnly_date < 5:
+                finnly_date_weight = 0.5
+        elif 5 <= finnly_date <10:
+                finnly_date_weight = 0.3
+        elif 10 <= finnly_date <20:
+                finnly_date_weight = 0.1
+        elif 20 <= finnly_date:
+                finnly_date_weight = 0.01
+        experiance_score = max_working_form_weight*profession_degree_weight* finnly_date_weight
         
-        return user
+        
+        return experiance_score
