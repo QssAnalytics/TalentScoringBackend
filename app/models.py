@@ -6,7 +6,7 @@ from django.utils.text import slugify
 
 class Answer(models.Model):
     questionIdd = models.ForeignKey(
-        "app.Question", on_delete=models.PROTECT, related_name='answers')
+        "app.Question", on_delete=models.CASCADE, related_name='answers')
     answer_title = models.CharField(max_length=100, null=True, blank=True)
     answer_weight = models.DecimalField(max_digits=9,
                                         decimal_places=4,

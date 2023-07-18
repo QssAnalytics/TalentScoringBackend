@@ -8,7 +8,7 @@ urlpatterns = [
     path('refresh-token/', user_views.CookieTokenRefreshView.as_view()),
     path('logout/', user_views.logoutView),
     path("user/", user_views.user),
-    path("user-score/<str:username>/", user_views.UserScoreApiView.as_view()),
+    path("user-education-score/<str:username>/", user_views.UserScoreApiView.as_view()),
     #path("question-lists/<slug:slug>/",stage_views.StageQuestionApiView.as_view()),
 
     path('get-question/', question_views.GetQuestionApiView.as_view()),

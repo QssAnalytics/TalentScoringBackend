@@ -1,4 +1,5 @@
 from typing import TypeVar
+from datetime import datetime
 import numpy as np
 import math, time
 from django.contrib.auth import get_user_model
@@ -6,10 +7,10 @@ from django.contrib.auth import get_user_model
 UserAccount = get_user_model()
 user_account_type = TypeVar('user_account_type', bound=UserAccount)
 
-def get_education_score(user_info: user_account_type, username:str):
+def get_education_score(user: user_account_type):
         # start_time = time.time()
         tehsil_score = 0
-        user = user_info.objects.filter(username = username).first()
+        
         education= user.user_info[0]["formData"]["education"]
         occupation_weight = user.user_info[0]["formData"]["curOccupation"]["answer_weight"]
         grade_weight = user.user_info[0]["formData"]["educationGrant"]["answer_weight"]
@@ -46,5 +47,26 @@ def get_education_score(user_info: user_account_type, username:str):
 def get_language_score():
         pass
 
-def get_experience_score():
-        pass
+def get_experience_score(user: user_account_type):
+        workingform = {"Fiziki əmək":1, "Sənət":2, "Ali ixtisas":3, "Sahibkar":4}
+        max_working_form_weight = 0
+        profession_degree_weight = 0
+        userdata = user.user_info[3]["formData"]["experiences"]
+        max = 0
+        for data in userdata:
+                if workingform[data["workingActivityForm"]["answer"]]>max:
+                        max = workingform[data["workingActivityForm"]["answer"]]
+                        max_working_form_weight = data["workingActivityForm"]["answer_weight"]
+                        profession_degree_weight = data["degreeOfProfes"]["answer_weight"]
+                        if data["endDate"] == "":
+                                current_date = datetime.now()
+                                start_date = datetime.strptime(data["startDate"], "%Y-%m-%d")
+                                difference = current_date - start_date
+                        else:
+                                start_date = datetime.strptime(data["startDate"], "%Y-%m-%d")
+                                end_date = datetime.strptime(data["endDate"], "%Y-%m-%d")
+                                difference = end_date - start_date
+        finnly_date = difference.days/365.25
+        print(max_working_form_weight*profession_degree_weight)
+        
+        return user

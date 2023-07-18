@@ -9,7 +9,6 @@ DATABASES = {
     }
 }
 
-
 CORS_ALLOWED_ORIGINS = [
     'https://talentscoringbackend-production.up.railway.app',
     'http://localhost:3000',

@@ -8,7 +8,7 @@ from rest_framework_simplejwt import tokens, views as jwt_views, serializers as 
 from drf_yasg.utils import swagger_auto_schema
 from django.conf import settings
 from app import models
-from app.helpers.user_helpers import get_education_score
+from app.helpers.user_helpers import *
 from pprint import pprint
 
 from app.serializers import user_serializers
@@ -140,12 +140,25 @@ def user(request):
 
 
 
+# class UserEducationScoreApiView(APIView):
+#     def get(self, request, username):
+#         user = models.UserAccount.objects.filter(username = username).first()
+#         tehsil_score_exists = any("tehsil_score" in item for item in user.user_info)
+#         if not tehsil_score_exists:
+#             user, tehsil_score = get_education_score(user)
+#             user.user_info.append({"tehsil_score":tehsil_score})
+#             user.save()
+#             return response.Response({"user-info":user.user_info})
+#         return response.Response({"user-info":user.user_info})
+
+
 class UserScoreApiView(APIView):
     def get(self, request, username):
-        user, tehsil_score = get_education_score(models.UserAccount, username)
-        tehsil_score_exists = any("tehsil_score" in item for item in user.user_info)
-        if not tehsil_score_exists:
-            user.user_info.append({"tehsil_score":tehsil_score})
-            user.save()
-            return response.Response({"user-info":user.user_info})
-        return response.Response({"user-info":user.user_info})
+        user = models.UserAccount.objects.filter(username = username).first()
+        user, tehsil_score = get_education_score(user)
+
+        
+        userbla = get_experience_score(user)
+        # user.user_info.append({"tehsil_score":tehsil_score})
+        # user.save()
+        return response.Response({"user-info":user.user_info, "tehsil_score":tehsil_score})
