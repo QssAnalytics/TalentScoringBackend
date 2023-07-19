@@ -70,7 +70,6 @@
     "formData": {
       "experiences": [
         {
-          "haveExperience": "0",
           "company": "as",
           "profession": "asd",
           "workingActivityForm": {
