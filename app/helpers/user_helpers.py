@@ -7,7 +7,9 @@ from django.contrib.auth import get_user_model
 UserAccount = get_user_model()
 user_account_type = TypeVar('user_account_type', bound=UserAccount)
 
-async def get_education_score(user: user_account_type):
+
+
+def get_education_score(user: user_account_type):
         # start_time = time.time()
         tehsil_score = 0
         
@@ -44,10 +46,7 @@ async def get_education_score(user: user_account_type):
         tehsil_score = np.round(tehsil_score,8)
         return tehsil_score
 
-def get_language_score():
-        pass
-
-async def get_experience_score(user: user_account_type):
+def get_experience_score(user: user_account_type):
         workingform = {"Fiziki əmək":1, "Sənət":2, "Ali ixtisas":3, "Sahibkar":4}
         max_working_form_weight = 0
         profession_degree_weight = 0
@@ -83,3 +82,7 @@ async def get_experience_score(user: user_account_type):
         
         
         return experiance_score
+
+def get_language_score():
+        pass
+

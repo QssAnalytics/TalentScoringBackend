@@ -80,7 +80,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'talent_score.wsgi.application'
 
-
+ASGI_APPLICATION = 'talent_score.asgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 

@@ -64,5 +64,47 @@
         "answer_weight":0.2
       }
     }
+  },
+  {
+    "name": "is-tecrubesi-substage",
+    "formData": {
+      "experiences": [
+        {
+          "haveExperience": "0",
+          "company": "as",
+          "profession": "asd",
+          "workingActivityForm": {
+            "id": 225,
+            "answer": "Fiziki əmək",
+            "answer_weight":0.8
+          },
+          "degreeOfProfes": {
+            "id": 231,
+            "answer": "Mütəxəssis",
+            "answer_weight":0.5
+          },
+          "startDate": "2022-07-19",
+          "endDate": "2023-07-14",
+          "currentWorking": false
+        },
+        {
+          "company": "asda",
+          "profession": "saxc",
+          "workingActivityForm": {
+            "id": 226,
+            "answer": "Sənət",
+            "answer_weight":0.5
+          },
+          "degreeOfProfes": {
+            "id": 231,
+            "answer": "Mütəxəssis",
+            "answer_weight":0.5
+          },
+          "startDate": "2023-06-29",
+          "endDate": "",
+          "currentWorking": true
+        }
+      ]
+    }
   }
 ]
