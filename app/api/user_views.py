@@ -177,7 +177,7 @@ class UserScoreApiView(APIView):
 class CvPromptApiView(APIView):
     def get(self, request):
         df = pd.read_excel('sample_df.xlsx')
-        openai.api_key = "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"
+        
         def generate_cv_summary(i = 17, dataframe = df, save_pdf = True, pdf_file_name = 'sample_CV.pdf', print_response = True, temperature = 0.7):
     
             ######################
