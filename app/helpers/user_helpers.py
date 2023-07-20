@@ -101,10 +101,32 @@ def get_experience_score(user: user_account_type):
 def get_language_score():
         pass
 
-
     # end_time = time.time()
         # duration = end_time - start_time
         # print("Duration:", duration, "seconds")
         # tehsil_score = (occupation_weight*education_weight*(grade_weight*education_score*olympiad_status_weight*olympiad_rank_weight)**(1/3))*100
 # education_weight = np.exp(np.log(education[0]["bachelor"]["answer_weight"]) + np.log(education[1]["master"]["answer_weight"]) + np.log(education[2]["phd"]["answer_weight"]))
         # start_time = time.time()
+
+
+def get_skills_weight(user):
+        userdata = user.user_info[4]["formData"]["specialSkills"]
+        lst=[]
+        heveskar_count = 0
+        pesekar_count = 0
+
+        for data in userdata:
+                lst.append(data['talent_level'])
+                if data['talent_level'] == 'heveskar':
+                        heveskar_answer_weight = data['answer_weight']
+                elif data['talent_level'] == 'pesekar':
+                        pesekar_answer_weight = data['answer_weight']
+
+        for value in lst:
+                if value=='heveskar':
+                        heveskar_count += 1
+                elif value=='pesekar':
+                        pesekar_count += 1
+
+        formula_result = (heveskar_count**heveskar_answer_weight) * (pesekar_count**pesekar_answer_weight)
+        return formula_result
