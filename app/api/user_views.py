@@ -1,4 +1,4 @@
-import math, pandas as pd, openai
+import math, pandas as pd, openai, environ
 from django.shortcuts import render
 from django.contrib.auth import authenticate, login
 from django.middleware import csrf
@@ -13,6 +13,8 @@ from pprint import pprint
 
 from app.serializers import user_serializers
 # Create your views here.
+env = environ.Env()
+environ.Env.read_env()
 
 def get_user_tokens(user):
     refresh = tokens.RefreshToken.for_user(user)
@@ -165,7 +167,7 @@ def user(request):
 class UserScoreApiView(APIView):
     def get(self, request, username):
         user = models.UserAccount.objects.filter(username=username).only("username", "user_info").first()
-
+        print(env('api_key'))
         tehsil_score = get_education_score(user)
         experiance_score = get_experience_score(user)
 
@@ -256,7 +258,8 @@ class SummryPromptApiView(APIView):
 class ExperiancePromptApiView(APIView):
     def get(self, request):
         df = pd.read_excel('sample_df.xlsx')
-        openai.api_key = "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"
+        
+        openai.api_key = env('api_key')
         def generate_summary_job_experience(i = 17, dataframe = df, job_no = 1, temperature = 0.7):
 
             ######################
