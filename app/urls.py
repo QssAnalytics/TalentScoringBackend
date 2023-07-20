@@ -9,7 +9,8 @@ urlpatterns = [
     path('logout/', user_views.logoutView),
     path('user/', user_views.user),
     path('user-education-score/<str:username>/', user_views.UserScoreApiView.as_view()),
-    path('get-summry/', user_views.CvPromptApiView.as_view()),
+    path('get-summry-prompt/', user_views.SummryPromptApiView.as_view()),
+    path('get-experiance-prompt/', user_views.ExperiancePromptApiView.as_view()),
     #path("question-lists/<slug:slug>/",stage_views.StageQuestionApiView.as_view()),
 
     path('get-question/', question_views.GetQuestionApiView.as_view()),

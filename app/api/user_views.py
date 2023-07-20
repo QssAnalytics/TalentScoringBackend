@@ -174,10 +174,11 @@ class UserScoreApiView(APIView):
         return response.Response({"user-info":user.user_info, "tehsil_score":tehsil_score, "experiance_score":experiance_score})
     
 
-class CvPromptApiView(APIView):
+class SummryPromptApiView(APIView):
     def get(self, request):
         df = pd.read_excel('sample_df.xlsx')
-        
+        a = df.iloc[17]["work_experience"]
+        # openai.api_key = 
         def generate_cv_summary(i = 17, dataframe = df, save_pdf = True, pdf_file_name = 'sample_CV.pdf', print_response = True, temperature = 0.7):
     
             ######################
@@ -249,6 +250,12 @@ class CvPromptApiView(APIView):
         sample_summary = generate_cv_summary()
         sample_summary.replace('\n\n', '\n')
         
+        return response.Response({"sample_summary":sample_summary})
+    
+class ExperiancePromptApiView(APIView):
+    def get(self, request):
+        df = pd.read_excel('sample_df.xlsx')
+        # openai.api_key = 
         def generate_summary_job_experience(i = 17, dataframe = df, job_no = 1, temperature = 0.7):
 
             ######################
@@ -324,4 +331,4 @@ class CvPromptApiView(APIView):
 
         job_experience1 = generate_summary_job_experience()
         job_experience1 = job_experience1.replace("•",'').split('\n')
-        return response.Response({"job_experience":job_experience1, "sample_summary":sample_summary})
+        return response.Response({"job_experience":job_experience1})
