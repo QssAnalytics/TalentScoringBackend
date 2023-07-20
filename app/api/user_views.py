@@ -181,7 +181,7 @@ class SummryPromptApiView(APIView):
     def get(self, request):
         df = pd.read_excel('sample_df.xlsx')
         a = df.iloc[17]["work_experience"]
-        openai.api_key = "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"
+        openai.api_key = env('api_key')
         def generate_cv_summary(i = 17, dataframe = df, save_pdf = True, pdf_file_name = 'sample_CV.pdf', print_response = True, temperature = 0.7):
     
             ######################
