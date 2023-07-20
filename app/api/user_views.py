@@ -168,6 +168,7 @@ class UserScoreApiView(APIView):
 
         tehsil_score = get_education_score(user)
         experiance_score = get_experience_score(user)
+
         # user.user_info.append({"tehsil_score":tehsil_score})
         # user.save()
 
@@ -315,7 +316,7 @@ class ExperiancePromptApiView(APIView):
                                                     User data is this: {prompt}. You may also need to know that {testing_system_info}.
                                                     The response you give will be written into CV pdf file, so that do not indicate any redundant and irrelevant things in your response.
                                                     """},
-                    {"role": "user", "content": f"""Please create me a short summary (max 100 words) part of my job experience {job_no} based on the information of me professionally and in a formal way. 
+                    {"role": "user", "content": f"""Please create me a short summary (max 3 bullet points, each no more than 10 words) part of my job experience {job_no} based on the information of me professionally and in a formal way. 
                                                  Add some extra explanations as needed. Do not indicate something like 'Summary:' etc. The response  will be automatically written to CV.
                                                  Use bullet points as needed. Do not indicate job name, positions, date range, only some info about job.
                                                  """},
