@@ -1,5 +1,6 @@
-import environ
+import environ, os
 
+from pprint import pprint
 from pathlib import Path
 from datetime import timedelta
 env = environ.Env()
@@ -11,7 +12,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 DEBUG = True
 
 
-SECRET_KEY = env('SECRET_KEY')
+
+SECRET_KEY = 'django-insecure-xee+ko&ew1x^27)yih!69%gh5=)e=t6n-l3ugbth4m!asr1$k)' #os.getenv("SECRET_KEY") 
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
