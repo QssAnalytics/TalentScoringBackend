@@ -179,7 +179,7 @@ class SummryPromptApiView(APIView):
     def get(self, request):
         df = pd.read_excel('sample_df.xlsx')
         a = df.iloc[17]["work_experience"]
-        # openai.api_key = 
+        openai.api_key = "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"
         def generate_cv_summary(i = 17, dataframe = df, save_pdf = True, pdf_file_name = 'sample_CV.pdf', print_response = True, temperature = 0.7):
     
             ######################
@@ -256,7 +256,7 @@ class SummryPromptApiView(APIView):
 class ExperiancePromptApiView(APIView):
     def get(self, request):
         df = pd.read_excel('sample_df.xlsx')
-        # openai.api_key = 
+        openai.api_key = "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"
         def generate_summary_job_experience(i = 17, dataframe = df, job_no = 1, temperature = 0.7):
 
             ######################
@@ -332,4 +332,6 @@ class ExperiancePromptApiView(APIView):
 
         job_experience1 = generate_summary_job_experience()
         job_experience1 = job_experience1.replace("•",'').split('\n')
+        job_experience1 = list(map(lambda x: x.strip(), job_experience1))
+        job_experience1 = list(map(lambda x: x[1:] if x[0] == '-' else x, job_experience1))
         return response.Response({"job_experience":job_experience1})
