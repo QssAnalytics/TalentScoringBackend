@@ -1,30 +1,30 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[3]:
+# In[1]:
 
 
 import pandas as pd
 import textwrap
-# from fpdf import FPDF
+from fpdf import FPDF
 
 
-# In[4]:
+# In[2]:
 
 
 df = pd.read_excel('sample_df.xlsx')
 
 
-# In[4]:
+# In[3]:
 
 
 import openai
-openai.api_key = "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"
+openai.api_key = "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"
 
 
 # ## Define CV Generator Function
 
-# In[51]:
+# In[4]:
 
 
 def generate_cv_content(i = 17, dataframe = df, save_pdf = True, pdf_file_name = 'sample_CV.pdf', print_response = True, 
@@ -326,11 +326,16 @@ job_experience1 = generate_summary_job_experience()
 
 # ## Job title
 
-# In[115]:
+# In[5]:
 
 
-def generate_summary_job_title(i = 17, dataframe = df, save_pdf = True, pdf_file_name = 'sample_CV.pdf', print_response = True, job_no = 1,
-                       temperature = 0.7):
+df.iloc[17].desired_job
+
+
+# In[12]:
+
+
+def generate_job_title(i = 17, dataframe = df, temperature = 0.7):
     
     ######################
     ##  Create Prompt   ##
@@ -382,15 +387,18 @@ def generate_summary_job_title(i = 17, dataframe = df, save_pdf = True, pdf_file
 
 
     # Example OpenAI Python library request
+    desired_job_vacancy = df.iloc[i].desired_job
+    x = '' if desired_job_vacancy else "I want to apply for the position: " + desired_job_vacancy
     MODEL = "gpt-3.5-turbo"
     response = openai.ChatCompletion.create(
         model=MODEL,
         messages=[
-            {"role": "system", "content": f"""You are a helpful AI tool which can create or paraphrase Job Title parts (such as 'Manager', 'Data Scientist') of job experience parts of CV professionally. 
+            {"role": "system", "content": f"""You are a helpful AI tool which can create Job Title of people (such as 'Manager', 'Data Scientist') for CV professionally.
+                                            The user may give extra prompt such as 'I want to apply for this job', etc.
                                             User data is this: {prompt}. You may also need to know that {testing_system_info}.
                                             The response you give will be written into CV pdf file, so that do not indicate any redundant and irrelevant things in your response.
                                             """},
-            {"role": "user", "content": f"""Please create me a Job title for my job experience {job_no} based on the information of me professionally and in a formal way. 
+            {"role": "user", "content": f"""Please create me a Job title for me based on the information of me professionally and in a formal way. {x}
                                          The response  will be automatically written to CV. Do not indicate things like 'Job title:' or date ranges, company name, etc.
                                          """},
             # {"role": "assistant", "content": "Who's there?"},
@@ -406,33 +414,14 @@ def generate_summary_job_title(i = 17, dataframe = df, save_pdf = True, pdf_file
     return response.choices[0].message.content
 
 
-# In[116]:
+# In[13]:
 
 
-sample_job_title = generate_summary_job_title()
+sample_job_title = generate_job_title()
 
 
-# In[117]:
+# In[14]:
 
 
 sample_job_title
-
-
-# In[15]:
-
-
-import json
-
-
-# In[17]:
-
-
-x = df.iloc[0].educations
-json.loads(x.replace("'", '"'))
-
-
-# In[ ]:
-
-
-
 
