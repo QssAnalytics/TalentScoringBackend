@@ -170,11 +170,12 @@ class UserScoreApiView(APIView):
         print(env('api_key'))
         tehsil_score = get_education_score(user)
         experiance_score = get_experience_score(user)
+        skills_weight = get_skills_weight(user)
 
         # user.user_info.append({"tehsil_score":tehsil_score})
         # user.save()
 
-        return response.Response({"user-info":user.user_info, "tehsil_score":tehsil_score, "experiance_score":experiance_score})
+        return response.Response({"user-info":user.user_info, "tehsil_score":tehsil_score, "experiance_score":experiance_score, "special_skills_weight":skills_weight})
     
 
 class SummryPromptApiView(APIView):
