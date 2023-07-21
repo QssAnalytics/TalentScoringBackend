@@ -4,7 +4,7 @@ import os, environ
 env = environ.Env()
 environ.Env.read_env()
 
-if os.getenv("ENV_NAME")  == "LOCAL":
+if env("ENV_NAME")  == "LOCAL":
     from talent_score.settings.local import *
 
 else :
