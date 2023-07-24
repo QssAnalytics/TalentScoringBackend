@@ -66,6 +66,45 @@
     }
   },
   {
+    "name":"dil-bilikleri-substage",
+      "formData":{
+        "languageSkills": [
+          {
+            "language": {
+              "id": 244,
+              "answer": "Rus dili"
+            },
+            "langCert": "0",
+            "langCertName": "wergrjfbrejk",
+            "langCertResult": "200",
+            "langLevel": "C1 (Üst orta)",
+            "answer_weight":0.03
+          },
+          {
+            "language": {
+              "id": 243,
+              "answer": "Ingilis dili"
+            },
+            "engLangCert": "0",
+            "ieltsResult": {
+              "id": 289,
+              "answer": "8.0-9.0"
+            },
+            "answer_weight":0.03
+          },
+          {
+            "language": {
+              "id": 246,
+              "answer": "Ispan dili"
+            },
+            "langCert": "1",
+            "langLevel": "C2 (İrəli)",
+            "answer_weight":0.001
+          }
+        ]
+      }
+  },
+  {
     "name": "is-tecrubesi-substage",
     "formData": {
       "experiences": [
