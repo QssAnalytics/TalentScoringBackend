@@ -130,3 +130,29 @@ def get_skills_weight(user):
 
         formula_result = (heveskar_count**heveskar_answer_weight) * (pesekar_count**pesekar_answer_weight)
         return formula_result
+
+def get_language_weight(user):
+    userdata = user.user_info[5]["formData"]["languageSkills"]
+    lst = []
+    rus_dili = 0
+    ingilis_dili = 0
+    ispan_dili = 0
+
+    for data in userdata:
+        lst.append(data['language']['answer'])
+        language = data["language"]["answer"]
+        if language == 'Rus dili':
+            rus_dili += 1
+            rus_dili_answer_weight = data['answer_weight']
+        elif language == 'Ingilis dili':
+            ingilis_dili += 1
+            ingilis_dili_answer_weight = data['answer_weight']
+        elif language == 'Ispan dili':
+            ispan_dili += 1
+            ispan_dili_answer_weight = data['answer_weight']
+
+#     print("Language counts:", rus_dili, ingilis_dili, ispan_dili)
+#     print("Answer weights:", rus_dili_answer_weight, ingilis_dili_answer_weight, ispan_dili_answer_weight)
+
+    formula_result = (rus_dili ** rus_dili_answer_weight) * (ingilis_dili ** ingilis_dili_answer_weight) * (ispan_dili ** ispan_dili_answer_weight)
+    return formula_result

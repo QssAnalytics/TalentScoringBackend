@@ -167,15 +167,15 @@ def user(request):
 class UserScoreAPIView(APIView):
     def get(self, request, username):
         user = models.UserAccount.objects.filter(username=username).only("username", "user_info").first()
-        print(env('api_key'))
         tehsil_score = get_education_score(user)
         experiance_score = get_experience_score(user)
         skills_weight = get_skills_weight(user)
+        language_weight = get_language_weight(user)
 
         # user.user_info.append({"tehsil_score":tehsil_score})
         # user.save()
 
-        return response.Response({"user-info":user.user_info, "tehsil_score":tehsil_score, "experiance_score":experiance_score, "special_skills_weight":skills_weight})
+        return response.Response({"user-info":user.user_info, "tehsil_score":tehsil_score, "experiance_score":experiance_score, "special_skills_weight":skills_weight, "language_weight":language_weight})
     
 
 class SummryPromptAPIView(APIView):
