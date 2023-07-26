@@ -139,20 +139,22 @@ def get_language_weight(user):
     ispan_dili = 0
 
     for data in userdata:
-        lst.append(data['language']['answer'])
+        
         language = data["language"]["answer"]
         if language == 'Rus dili':
-            rus_dili += 1
-            rus_dili_answer_weight = data['answer_weight']
+                rus_dili += 1
+                rus_dili_answer_weight = data['answer_weight']
+                lst.append(rus_dili_answer_weight*rus_dili)
         elif language == 'Ingilis dili':
-            ingilis_dili += 1
-            ingilis_dili_answer_weight = data['answer_weight']
+                ingilis_dili += 1
+                ingilis_dili_answer_weight = data['answer_weight']
+                lst.append(ingilis_dili_answer_weight*ingilis_dili)
         elif language == 'Ispan dili':
-            ispan_dili += 1
-            ispan_dili_answer_weight = data['answer_weight']
+                ispan_dili += 1
+                ispan_dili_answer_weight = data['answer_weight']
+                lst.append(ispan_dili_answer_weight*ispan_dili)
 
-#     print("Language counts:", rus_dili, ingilis_dili, ispan_dili)
-#     print("Answer weights:", rus_dili_answer_weight, ingilis_dili_answer_weight, ispan_dili_answer_weight)
+        # print(lst)
 
-    formula_result = (rus_dili ** rus_dili_answer_weight) * (ingilis_dili ** ingilis_dili_answer_weight) * (ispan_dili ** ispan_dili_answer_weight)
+    formula_result = lst[0]*lst[1]*lst[2]
     return formula_result
