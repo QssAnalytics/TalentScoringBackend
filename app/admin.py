@@ -22,7 +22,7 @@ class AnswerTabularInline(admin.TabularInline):
 
 @admin.register(model.Question)
 class QuestionAdmin(admin.ModelAdmin):
-    list_display = ('question_title', 'stage', 'question_dependens_on_answer', 'question_type')
+    list_display = ('question_title', 'stage', 'question_dependens_on_answer','question_index', 'question_type')
     inlines = [AnswerTabularInline]
     search_fields = ('question_title', 'question_dependens_on_question')
     raw_id_fields = ('question_dependens_on_answer', 'question_dependens_on_question')

@@ -6,7 +6,7 @@ from django.utils.text import slugify
 
 class Answer(models.Model):
     questionIdd = models.ForeignKey(
-        "app.Question", on_delete=models.PROTECT, related_name='answers')
+        "app.Question", on_delete=models.CASCADE, related_name='answers')
     answer_title = models.CharField(max_length=100, null=True, blank=True)
     answer_weight = models.DecimalField(max_digits=9,
                                         decimal_places=4,
@@ -44,7 +44,7 @@ class Question(models.Model):
     question_dependens_on_answer = models.ForeignKey('app.Answer', related_name = 'questions', blank=True,null=True, on_delete=models.CASCADE)
     question_type = models.CharField(max_length=50, blank=True, null=True)
     question_dependens_on_question = models.ForeignKey('self', blank=True, null=True, related_name='question_depend', on_delete=models.CASCADE)
-    stage_index = models.IntegerField(blank=True, null=True)
+    question_index = models.IntegerField(blank=True, null=True)
     class Meta:
         verbose_name = 'Question'
         verbose_name_plural = 'Questions'
