@@ -59,8 +59,9 @@ def get_bachelor_weight(user):
                                 total_bachelors_weight = np.round((lokal_test_weight*total_muraciyyet_weight)**(1/2),3)    
                                 return total_bachelors_weight
                         elif bachelors['bachelor']['criterion']['criterion_type'] == 'Lokal imtahan': 
-                               pass
-                        
+                                total_bachelors_weight = bachelors['bachelor']['criterion']['lokal_test']['answer_weight']
+                                return total_bachelors_weight
+
                         elif bachelors['bachelor']['criterion']['criterion_type'] == 'Müraciyyət': 
                                pass
 

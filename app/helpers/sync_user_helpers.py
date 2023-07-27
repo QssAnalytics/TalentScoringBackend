@@ -13,7 +13,7 @@ user_account_type = TypeVar('user_account_type', bound=UserAccount)
 def get_education_score(user: user_account_type):
         a = get_bachelor_weight(user)
         # print(a)
-
+  
         return 1 
         
         
