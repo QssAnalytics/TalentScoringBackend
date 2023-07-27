@@ -1,7 +1,8 @@
-from typing import TypeVar
-from app.utils.user_utils import *
 import numpy as np
 import math, time
+from typing import TypeVar
+from app.utils.user_utils import *
+
 from django.contrib.auth import get_user_model
 
 UserAccount = get_user_model()
@@ -10,23 +11,10 @@ user_account_type = TypeVar('user_account_type', bound=UserAccount)
 
 
 def get_education_score(user: user_account_type):
-    tehsil_score = 0
-    userdata = user.user_info[1]["formData"]["EducationScore"]
-    for bachelors in userdata:
-        if bachelors.get("bachelor") is not None:
-            if bachelors['bachelor']['criterion']['criterion_type'] == 'her ikisi':
-                lokal_test_weight = bachelors['bachelor']['criterion']['lokal_test']['answer_weight']
-                muraciyyet = bachelors['bachelor']['criterion']['muraciyyet']
-                if len(muraciyyet)>1:
-                    for m in muraciyyet:
-                        if m['muraciyyet_type'] == 'Atestat':            
-                            atestat_weight = m['answer_weight']
-                            print(atestat_weight)
-                        elif m['muraciyyet_type'] == 'language':
-                            m['language_type']
-                                    
-            break
-    return 1
+        a = get_bachelor_weight(user)
+        # print(a)
+
+        return 1 
         
         
 

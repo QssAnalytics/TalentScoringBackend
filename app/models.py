@@ -48,6 +48,8 @@ class Question(models.Model):
     class Meta:
         verbose_name = 'Question'
         verbose_name_plural = 'Questions'
+    
+        ordering = ['stage__stage_name', 'question_index']
 
     def __str__(self):
         
