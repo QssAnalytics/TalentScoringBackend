@@ -28,6 +28,8 @@ INSTALLED_APPS = [
     'drf_yasg',
     'drf_spectacular',
     'debug_toolbar',
+    'adrf',
+    
     # 'asgiref',
     'app',
 

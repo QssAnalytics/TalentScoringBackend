@@ -34,21 +34,102 @@
         "answer_weight":0.3}
     }
   },
-  {"name":"orta-texniki-ve-ali-tehsil-suallari",
-    "formData":{"vocationalScore":"",
-      "bachelorsScore":{
-        "score":456,
-        "answer_weight":0.5
-      },
-      "masterScore":{
-        "score":70,
-        "answer_weight":0.25
-      },
-      "phdScore":{
-        "score":81,
-        "answer_weight":0.25
+  {
+    "name": "orta-texniki-ve-ali-tehsil-suallari",
+    "formData": {
+      "EducationScore": [
+        {"bachelor":{
+          "id":1,
+          "country":"Russian",
+          "universty_name":"Moskva dovlet Unisi",
+          "specialty":"ITIF",
+          "uni_start":"date",
+          "uni_end":"date",
+          "criterion":
+            {
+              "criterion_type":"her ikisi",
+              "lokal_test":[
+                {
+                  "lokal_test_name":"asdasd",
+                   "score":500,
+                   "max_score":700,
+                  "answer_weight":0.5
+                }
+              ],
+              "muraciyyet": [
+                {
+                  "muraciyyet_type":"Atestat",
+                  "score":20,
+                  "answer_weight":0.03
+                },
+                {
+                  "muraciyyet_type":"language",
+                  "language_type":[
+                    {
+                      "language_name":"IELTS",
+                      "language_score":6.5,
+                      "answer_weight":0.4
+                    },
+                    {
+                      "language_name":"TOFEL",
+                      "language_score":6.5,
+                      "answer_weight":0.4
+                    }
+                  ]
+  
+                }
+              ]
+            }
+        }},
+        {"bachelor":{
+          "id":1,
+          "country":"Russian",
+          "universty_name":"Moskva dovlet Unisi",
+          "specialty":"ITIF",
+          "uni_start":"date",
+          "uni_end":"date",
+          "criterion":
+            {
+              "criterion_type":"her ikisi",
+              "lokal_test":[
+                {
+                  "lokal_test_name":"asdasd",
+                   "score":500,
+                   "max_score":700,
+                  "answer_weight":0.5
+                }
+              ],
+              "muraciyyet": [
+                {
+                  "muraciyyet_type":"Atestat",
+                  "score":20,
+                  "answer_weight":0.03
+                },
+                {
+                  "muraciyyet_type":"language",
+                  "language_type":[
+                    {
+                      "language_name":"IELTS",
+                      "language_score":6.5,
+                      "answer_weight":0.4
+                    },
+                    {
+                      "language_name":"TOFEL",
+                      "language_score":6.5,
+                      "answer_weight":0.4
+                    }
+                  ]
+  
+                }
+              ]
+            }
+        }},
+        {"master":{}},
+        {"phd":{}}
         
-      }}},
+      ]
+  }
+  },
   {"name":"olimpiada-suallar",
     "formData":{
       "wonOlympics":"1",
