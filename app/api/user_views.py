@@ -165,7 +165,7 @@ class UserScoreAPIView(APIView):
         language_score = get_language_score(user) 
         experience_score = get_experience_score(user)
         return response.Response({"user_info":user.user_info, "special_skills_weight":skills_score, "language_score":language_score,
-                                    "experience_score":experience_score})
+                                    "experience_score":experience_score, "tehsil_score":tehsil_score})
     
 # class UserScoreAPIView(AsyncAPIView):
 

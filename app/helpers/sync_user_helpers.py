@@ -8,13 +8,51 @@ from django.contrib.auth import get_user_model
 UserAccount = get_user_model()
 user_account_type = TypeVar('user_account_type', bound=UserAccount)
 
-
+def check(data, key):
+        if data.get(key) is not None:
+                if data[key] !={}:
+                        return float(data[key]["answer_weight"])
+        return 1
 
 def get_education_score(user: user_account_type):
-        a = get_bachelor_weight(user)
-        # print(a)
-  
-        return 1 
+        user_info =  user.user_info
+        work_activite_weight = check(data = user_info[0]["formData"], key = "curOccupation")
+        education_weight = check(user_info[0]["formData"]["education"], key = "master")
+        education_grand_weight = check(data = user_info[0]["formData"], key = "educationGrant")
+        olimp_highest_weight = check(data = user_info[2]["formData"], key = "highestOlympiad")
+        olimp_rank_weight = check(data = user_info[2]["formData"], key = "rankOlympiad")
+        max_bachelor_weight = 1
+        max_master_weight = 1
+        max_phd_weight = 1
+        userdata = user_info[1]["formData"]["EducationScore"]
+        bachelor_weight_list = []
+        master_weight_list = []
+        phd_weight_list = []
+        for edu in userdata:
+                if edu.get("bachelor") is not None:
+                        if edu["bachelor"] != {}:
+                                bachelor_weight = get_bachelor_weight(edu)
+                                bachelor_weight_list.append(bachelor_weight)
+                if edu.get("master") is not None:
+                        if edu["master"] != {}:
+                                master_weight = get_master_weight(edu)
+                                master_weight_list.append(master_weight)
+                                
+                if edu.get("phd") is not None:
+                        if edu["phd"] != {}:
+                                phd_weight = get_phd_weight(edu)
+                                phd_weight_list.append(phd_weight)                           
+        if bachelor_weight_list!=[]:
+                max_bachelor_weight = max(bachelor_weight_list)
+        if  master_weight_list != []:
+                max_master_weight = max(master_weight_list)
+        if phd_weight_list != []:
+                max_phd_weight = max(master_weight_list)
+        education_degree_weight = np.round(max_bachelor_weight*max_master_weight*max_phd_weight,3)
+        total_education_weight = work_activite_weight*education_weight*(education_grand_weight*education_degree_weight*olimp_highest_weight*olimp_rank_weight)**(1/3)
+        total_education_weight = np.round(total_education_weight,7)
+        
+        return total_education_weight
         
         
 
