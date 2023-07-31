@@ -164,8 +164,9 @@ class UserScoreAPIView(APIView):
         skills_score = get_skills_score(user)
         language_score = get_language_score(user) 
         experience_score = get_experience_score(user)
+        programming_skills_score = get_programming_skills_score(user)
         return response.Response({"user_info":user.user_info, "special_skills_weight":skills_score, "language_score":language_score,
-                                    "experience_score":experience_score})
+                                    "experience_score":experience_score, 'programming_skills_score':programming_skills_score})
     
 # class UserScoreAPIView(AsyncAPIView):
 
