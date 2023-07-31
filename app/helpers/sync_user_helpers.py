@@ -282,7 +282,7 @@ def get_programming_skills_score(user):
                 category_scores.append(category_score)
                 # print(f'{category}Score:', category_score)
                 # calculating overall programming skills score
-
+        print(category_scores) 
         # Check if all category scores are the same
         # calculate overall programming skills score
         if len(set(category_scores)) == 1:
@@ -295,36 +295,35 @@ def get_programming_skills_score(user):
                 minimum_score = min(category_scores)
                 category_scores.remove(minimum_score)
                 programming_skills_score = 1
-                        
+                a=0
                 if category_scores != []:        
                         for score in category_scores:
-                                if score >0.5 <1.0:
-                                        score = score * 0.9
+                                if 0.5 < score <= 1:
+                                        programming_skills_score *= 0.9
+                                        a+=1
+                                        # print(programming_skills_score)
 
-                                if score >0.3 <0.5:
-                                        score = score * 0.8
+                                elif 0.3 < score <= 0.5:
+                                        programming_skills_score *= 0.8
+                                
+                                elif 0.1 < score <= 0.3:
+                                        programming_skills_score *= 0.7
 
-                                if score >0.1 <0.3:
-                                        score = score * 0.7
+                                elif 0.01 < score <= 0.1:
+                                        programming_skills_score *= 0.5
+
+                                elif 0.001 < score <= 0.01:
+                                        programming_skills_score *= 0.3
+                                elif 0.0001 < score <= 0.001:
+                                        programming_skills_score *= 0.2
+
+                                else:
+                                        programming_skills_score *= 0.1
                                 
-                                if score >0.01 <0.1:
-                                        score = score * 0.5
-                                
-                                if score >0.001 <0.01:
-                                        score = score * 0.3
-                                
-                                if score >0.001 <0.0001:
-                                        score = score * 0.2
-                                
-                                if score < 0.0001:
-                                        score = score * 0.1
-                                
-                                programming_skills_score *= score
                         programming_skills_score *= minimum_score
+                        
                 else:
                         programming_skills_score = 0
-                
-                print('programming_skills_score', int(programming_skills_score))
-        
-        return round(programming_skills_score,10)
+                        
+        return programming_skills_score 
         
