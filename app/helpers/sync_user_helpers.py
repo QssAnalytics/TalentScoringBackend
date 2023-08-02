@@ -121,3 +121,247 @@ def get_language_score(user):
                 return total_language_weight
         
         return total_language_weight
+
+# weight_list = {
+        #         'Excel' : 0.2,
+        #         'Word' : 1,
+        #         "PowerPoint" : 0.4,
+        #         'office_level_weights' : [0.7, 0.5, 0.3],
+
+        #         'Python' : 0.3,
+        #         "Java" : 0.4,
+        #         "C/C++" : 0.5,
+        #         "Kotlin" : 0.5,
+        #         "HTML/CSS" : 0.6,
+        #         'C#' : 0.5,
+        #         "Javascript" : 0.4,
+        #         "Swift" : 0.5,
+        #         "SQL" : 0.5,
+        #         'elave': 0.4,
+        #         'prog_lang_level_weights' : [0.7, 0.5, 0.3],
+
+        #         'Figma' : 0.2,
+        #         "Canva" : 1,
+        #         "Photoshop" : 0.4,
+        #         "Adobe Illustrator" : 0.4,
+        #         'design_level_weights' : [0.6, 0.3, 0.1],
+                
+        #         'elave' : 0.2,
+        #         'elave_level_weights' : [0.6, 0.3, 0.1],
+        # }
+
+test_data  = [{"name":"umumi-suallar","formData":{"firstName":"a","lastName":"a","workExp":"1","curOccupation":{"id":4,"answer":"Çalışıram"},"education":{"id":10,"answer":"Peşə təhsili"},"educationGrant":{"id":14,"answer":"Əlaçı"}}},
+              {"name":"orta-texniki-ve-ali-tehsil-suallari","formData":{"vocationalScore":"3","bachelorsScore":"","masterScore":"","phdScore":""}},
+              {"name":"olimpiada-suallar","formData":{"wonOlympics":"0","subjectOlympiad":{"id":21,"answer":"Tarix"},"highestOlympiad":{"id":28,"answer":"Rayon"},"rankOlympiad":{"id":32,"answer":"2-ci yer (Gümüş medal)"}}},
+              {"name":"dil-bilikleri-substage","formData":{"haveLanguageSkills":"0","languageSkills":["İngilis dili","Rus dili"],"enlangCert":"2","engLevel":"4","ruLevel":"1"}},
+              {"name":"elave-dil-bilikleri-substage","formData":{"langs":[{"addLang":{"id":133,"answer":"İspan dili"},"levelLang":"B2 (Orta)","haveCertLang":"Xeyr"},{"addLang":{"id":135,"answer":"Yapon dili"},"levelLang":"B2 (Orta)","haveCertLang":"Bəli","certLang":"ead"}]}},
+              {"name":"xususi-bacariqlar-substage","formData":{"haveSpecialSkills":"0","specialSkills":["Musiqi","Rəqs"],"levelSkill":"","certSkill":"","Musiqi":"0","Rəqs":"1"}},
+              {"name":"xususi-bacariqlar-sertifikat-substage","formData":{"musiqiCertifcate":"asdas","rəqsCertifcate":"asdasdas"}},
+              {"name":"idman-substage","formData":{"haveSportCar":"0","whichSport":["Güləş","Voleybol","Şahmat"],"whichScore":[],"whichPlace":[],"whichScore0":{"id":63,"answer":"Rayon"},"whichPlace0":{"id":70,"answer":"3-cü yer"},"whichScore1":{"id":65,"answer":"Respublika"},"whichPlace1":{"id":70,"answer":"3-cü yer"},"whichScore2":{"id":67,"answer":"Olimpiada"},"whichPlace2":{"id":68,"answer":"1-ci yer"}}},
+              {"name":"is-tecrubesi-substage","formData":{"experiences":[{"haveExperience":"0","company":"as","profession":"asd","workingActivityForm":{"id":225,"answer":"Fiziki əmək"},"degreeOfProfes":{"id":231,"answer":"Mütəxəssis"},"startDate":"2023-07-19","endDate":"2023-07-14","currentWorking":False},{"company":"asda","profession":"saxc","workingActivityForm":{"id":226,"answer":"Sənət"},"degreeOfProfes":{"id":231,"answer":"Mütəxəssis"},"startDate":"2023-06-29","endDate":"","currentWorking":True}]}},
+              {"name":"proqram-bilikleri-substage",
+               "formData":{
+                       'design': [
+                                { 'answer': "Canva", 'weight': None, 'level': { 'answer': 'Junior', 'weight': None } },
+                                {'answer': "Photoshop",'weight': None,'level': { 'answer': 'Middle', 'weight': None }},
+                                ],
+                        'msOffice': [
+                                { 'answer': "Word", 'weight': 1, 'level': { 'answer': "Middle", 'weight': 0.5 } },
+                                {'answer': "Excel", 'weight': 0.2, 'level': { 'answer': "Junior", 'weight': 0.7 },},
+                                {'answer': "PowerPoint",'weight': 0.4,'level': { 'answer': "Senior", 'weight': 0.3 },},
+                                ],
+                        'programs': [
+                                {'answer': "Python",'weight': None,'level': { 'answer': "Middle", 'weight': None },},
+                                {'answer': "Java",'weight': None,'level': { 'answer': "Middle", 'weight': None },},
+                                {'answer': "Kotlin",'weight': None,'level': { 'answer': "Middle", 'weight': None },},
+                                {'answer': "C/C++",'weight': None,'level': { 'answer': "Middle", 'weight': None },},
+                                {'answer': "C#",'weight': None,'level': { 'answer': "Middle", 'weight': None },},
+                                {'answer': "SQL",'weight': None,'level': { 'answer': "Middle", 'weight': None },},
+                                {'answer': "Javascript",'weight': None,'level': { 'answer': "Middle", 'weight': None },},
+                                {'answer': "Swift",'weight': None,'level': { 'answer': "Middle", 'weight': None },},
+                                {'answer': "HTML/CSS",'weight': None,'level': { 'answer': "Middle", 'weight': None },},
+                                ],
+                        'others': [
+                                {'answer': "Blender",'weight': None,'level': { 'answer': "Junior", 'weight': None },},
+                                ],
+                                }
+                }
+        ]
+
+# get score weights for "proqram-bilikleri-substage"
+def get_programming_skills_score(user):
+
+        # userdata = user.user_info[9]["formData"]
+        userdata = test_data[9]["formData"]
+
+        result = {
+                'msOfficeScore':1,
+                'designScore':1,
+                'programsScore':1,
+                'othersScore':1,
+        }
+
+        # Calculating officeScore
+        word_score = 0
+        excel_score = 0
+        pp_score = 0
+        if userdata['msOffice'] and userdata['msOffice'] != [] and userdata['msOffice'] != 0 and userdata['msOffice'] != '0':
+                for answer in userdata['msOffice']:
+                        if answer['answer'] == 'Word':
+                                word_score = answer['weight'] * answer['level']['weight']
+                        if answer['answer'] == 'Excel':
+                                excel_score = answer['weight'] * answer['level']['weight']
+                        if answer['answer'] == 'PowerPoint':
+                                pp_score = answer['weight'] * answer['level']['weight']
+
+                weight_list = {
+                        'Excel' : excel_score,
+                        'Word' : word_score,
+                        "PowerPoint" : pp_score,
+                }
+                for value in weight_list.values():
+                        if value != 0:
+                                result['msOfficeScore'] *= value
+
+        else:
+                result["msOfficeScore"] = 0
+        
+        # print("msOfficeScore",result["msOfficeScore"])
+        
+        # Calculating Scores of design,programs, others categories       
+        level_scores_mapping = {
+                "programs": {"Junior": {1:0.3, 2:0.2, 3:0.1, 4:0.05}, 'Middle': {1:0.05, 2:0.03, 3:0.01, 4:0.005}, 'Senior' : {1:0.005, 2:0.003, 3:0.001, 4:0.0005}},
+                "design": {"Junior": {1:0.4, 2:0.3, 3:0.2, 4:0.1}, 'Middle': {1:0.1, 2:0.05, 3:0.01, 4:0.005}, 'Senior' : {1:0.01, 2:0.005, 3:0.001, 4:0.0005}},
+                "others": {"Junior": {1:0.4, 2:0.3, 3:0.2, 4:0.1}, 'Middle': {1:0.1, 2:0.05, 3:0.01, 4:0.005}, 'Senior' : {1:0.01, 2:0.005, 3:0.001, 4:0.0005}}
+                # "msOffice": {"Junior": {1:0.1,2:0.2,3:0.3,4:0.4}, 'Middle': {1:0.1,2:0.2,3:0.3,4:0.4}, 'Senior' : {1:0.1,2:0.2,3:0.3,4:0.4}},
+        }
+
+        # count of each level in 3 other categories
+        lst = {
+                'design' : [0,0,0],
+                'programs' : [0,0,0],
+                'others' : [0,0,0]
+        }
+
+        if userdata['design'] != [] !='' !=0:
+                for data in userdata['design']:
+                        if data['level']['answer'] == 'Junior':
+                                lst['design'][0] += 1
+                        if data['level']['answer'] == 'Middle':
+                                lst['design'][1] += 1
+                        if data['level']['answer'] == 'Senior':
+                                lst['design'][2] += 1
+
+        if userdata['programs'] != []:
+                for data in userdata['programs']:
+                        if data['level']['answer'] == 'Junior':
+                                lst['programs'][0] += 1
+                        if data['level']['answer'] == 'Middle':
+                                lst['programs'][1] += 1
+                        if data['level']['answer'] == 'Senior':
+                                lst['programs'][2] += 1
+
+        if userdata['others'] != []:
+                for data in userdata['others']:
+                        if data['level']['answer'] == 'Junior':
+                                lst['others'][0] += 1
+                        if data['level']['answer'] == 'Middle':
+                                lst['others'][1] += 1
+                        if data['level']['answer'] == 'Senior':
+                                lst['others'][2] += 1
+
+        levels = ['Junior', 'Middle', 'Senior']
+        for i, level in enumerate(levels):
+                #designScore
+                if lst['design'] != [0,0,0]:
+                        count = lst['design'][i]
+                        if count != 0:
+                                if count > 4:
+                                        level_score = level_scores_mapping['design'][level].get(4)
+                                        result['designScore'] *= level_score
+                                elif count <=4:
+                                        level_score = level_scores_mapping['design'][level].get(count)
+                                        result['designScore'] *= level_score
+                else:
+                        result['designScore'] = 0
+
+                # programsScore
+                if lst['programs'] != [0,0,0]:
+                        count = lst['programs'][i]
+                        if count != 0:
+                                if count > 4:
+                                        level_score = level_scores_mapping['programs'][level].get(4)
+                                        result['programsScore'] *= level_score
+                                elif count <=4:
+                                        level_score = level_scores_mapping['programs'][level].get(count)
+                                        result['programsScore'] *= level_score
+                else:
+                        result['programsScore'] = 0
+
+                #othersScore
+                if lst['others'] != [0,0,0]:
+                        count = lst['others'][i]
+                        if count != 0:
+                                if count > 4:
+                                        level_score = level_scores_mapping['others'][level].get(4)
+                                        result['othersScore'] *= level_score
+                                elif count <=4:
+                                        level_score = level_scores_mapping['others'][level].get(count)
+                                        result['othersScore'] *= level_score
+                else:
+                        result['othersScore'] = 0
+        
+        # find multiplication of all category scores except minimum one
+        category_scores = []
+        for category in userdata:
+                # max 4 decimal points 
+                result[f'{category}Score'] = round(result[f'{category}Score'], 4)
+                category_score = result[f'{category}Score']
+                category_scores.append(category_score)
+                # print(f'{category}Score:', category_score)
+                # calculating overall programming skills score
+        print(category_scores) 
+        # Check if all category scores are the same
+        # calculate overall programming skills score
+        if len(set(category_scores)) == 1:
+                print(f"All category scores are the same. min is {min(category_scores)}")
+        else:
+                # print("Category scores are different.")
+                # deleting minimum category score
+                
+                # print('index',category_scores.index(min(category_scores)))
+                minimum_score = min(category_scores)
+                category_scores.remove(minimum_score)
+                programming_skills_score = 1
+                a=0
+                if category_scores != []:        
+                        for score in category_scores:
+                                if 0.5 < score <= 1:
+                                        programming_skills_score *= 0.9
+                                        a+=1
+                                        # print(programming_skills_score)
+
+                                elif 0.3 < score <= 0.5:
+                                        programming_skills_score *= 0.8
+                                
+                                elif 0.1 < score <= 0.3:
+                                        programming_skills_score *= 0.7
+
+                                elif 0.01 < score <= 0.1:
+                                        programming_skills_score *= 0.5
+
+                                elif 0.001 < score <= 0.01:
+                                        programming_skills_score *= 0.3
+                                elif 0.0001 < score <= 0.001:
+                                        programming_skills_score *= 0.2
+
+                                else:
+                                        programming_skills_score *= 0.1
+                                
+                        programming_skills_score *= minimum_score
+                        
+                else:
+                        programming_skills_score = 0
+                        
+        return programming_skills_score 
+        
