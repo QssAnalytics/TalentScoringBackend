@@ -8,16 +8,22 @@ class RegistrationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UserAccount
-        fields=('username', 'first_name', 'last_name', 'age', 'password', 'password2')
+        fields=('email', 'first_name', 'last_name', 'birth_date','gender','native_language', 'country', 'password', 'password2')
         extra_kwargs = {
             "password": {"write_only": True},
             "password2": {"write_only": True}
         }
     def save(self):
+        
         user = UserAccount(
-            username = self.validated_data['username'],
-            age = self.validated_data['age']
-        )
+            email = self.validated_data['email'],
+            first_name = self.validated_data['first_name'],
+            last_name = self.validated_data['last_name'],
+            birth_date = self.validated_data['birth_date'],
+            gender = self.validated_data['gender'],
+            native_language = self.validated_data['native_language'],
+            country = self.validated_data['country']
+        ) 
         password = self.validated_data['password']
         password2 = self.validated_data['password2']
 
@@ -25,14 +31,14 @@ class RegistrationSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError({"password": "Passwords do not match!"})
         user.set_password(password)
         user.save()
-        return user
+        return "user"
 
 class LoginSerializer(serializers.Serializer):
-    username = serializers.CharField()
+    email = serializers.EmailField() 
     password = serializers.CharField(
         style={"input_type": "password"}, write_only=True)
     
 class UserAccountSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserAccount
-        fields = ("username", "age")
+        fields = ("email","gender")

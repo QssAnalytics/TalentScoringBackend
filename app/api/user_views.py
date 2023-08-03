@@ -32,9 +32,9 @@ def get_user_tokens(user):
 def loginView(request):
     serializer = user_serializers.LoginSerializer(data=request.data)
     serializer.is_valid(raise_exception=True)
-    username = serializer.validated_data['username']
+    email = serializer.validated_data['email']
     password = serializer.validated_data["password"]
-    user = authenticate(username=username, password=password)
+    user = authenticate(email=email, password=password)
     if user is not None:
         tokens=get_user_tokens(user)
         res = response.Response()
@@ -68,13 +68,15 @@ def loginView(request):
 @rest_decorators.api_view(["POST"])
 @rest_decorators.permission_classes([])
 def registerView(request):
+    print(request.data)
     serializer = user_serializers.RegistrationSerializer(data=request.data)
     serializer.is_valid(raise_exception=True)
 
     user = serializer.save()
 
-    if user is not None:
-        return response.Response("Registered!")
+    # if user is not None:
+    #     return response.Response("Registered!")
+    return response.Response("Registered!")
     return rest_exceptions.AuthenticationFailed("Invalid credentials!")
 
 
