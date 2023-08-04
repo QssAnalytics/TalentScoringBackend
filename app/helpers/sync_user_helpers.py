@@ -122,34 +122,6 @@ def get_language_score(user):
         
         return total_language_weight
 
-# weight_list = {
-        #         'Excel' : 0.2,
-        #         'Word' : 1,
-        #         "PowerPoint" : 0.4,
-        #         'office_level_weights' : [0.7, 0.5, 0.3],
-
-        #         'Python' : 0.3,
-        #         "Java" : 0.4,
-        #         "C/C++" : 0.5,
-        #         "Kotlin" : 0.5,
-        #         "HTML/CSS" : 0.6,
-        #         'C#' : 0.5,
-        #         "Javascript" : 0.4,
-        #         "Swift" : 0.5,
-        #         "SQL" : 0.5,
-        #         'elave': 0.4,
-        #         'prog_lang_level_weights' : [0.7, 0.5, 0.3],
-
-        #         'Figma' : 0.2,
-        #         "Canva" : 1,
-        #         "Photoshop" : 0.4,
-        #         "Adobe Illustrator" : 0.4,
-        #         'design_level_weights' : [0.6, 0.3, 0.1],
-                
-        #         'elave' : 0.2,
-        #         'elave_level_weights' : [0.6, 0.3, 0.1],
-        # }
-
 test_data  = [{"name":"umumi-suallar","formData":{"firstName":"a","lastName":"a","workExp":"1","curOccupation":{"id":4,"answer":"Çalışıram"},"education":{"id":10,"answer":"Peşə təhsili"},"educationGrant":{"id":14,"answer":"Əlaçı"}}},
               {"name":"orta-texniki-ve-ali-tehsil-suallari","formData":{"vocationalScore":"3","bachelorsScore":"","masterScore":"","phdScore":""}},
               {"name":"olimpiada-suallar","formData":{"wonOlympics":"0","subjectOlympiad":{"id":21,"answer":"Tarix"},"highestOlympiad":{"id":28,"answer":"Rayon"},"rankOlympiad":{"id":32,"answer":"2-ci yer (Gümüş medal)"}}},
@@ -157,7 +129,22 @@ test_data  = [{"name":"umumi-suallar","formData":{"firstName":"a","lastName":"a"
               {"name":"elave-dil-bilikleri-substage","formData":{"langs":[{"addLang":{"id":133,"answer":"İspan dili"},"levelLang":"B2 (Orta)","haveCertLang":"Xeyr"},{"addLang":{"id":135,"answer":"Yapon dili"},"levelLang":"B2 (Orta)","haveCertLang":"Bəli","certLang":"ead"}]}},
               {"name":"xususi-bacariqlar-substage","formData":{"haveSpecialSkills":"0","specialSkills":["Musiqi","Rəqs"],"levelSkill":"","certSkill":"","Musiqi":"0","Rəqs":"1"}},
               {"name":"xususi-bacariqlar-sertifikat-substage","formData":{"musiqiCertifcate":"asdas","rəqsCertifcate":"asdasdas"}},
-              {"name":"idman-substage","formData":{"haveSportCar":"0","whichSport":["Güləş","Voleybol","Şahmat"],"whichScore":[],"whichPlace":[],"whichScore0":{"id":63,"answer":"Rayon"},"whichPlace0":{"id":70,"answer":"3-cü yer"},"whichScore1":{"id":65,"answer":"Respublika"},"whichPlace1":{"id":70,"answer":"3-cü yer"},"whichScore2":{"id":67,"answer":"Olimpiada"},"whichPlace2":{"id":68,"answer":"1-ci yer"}}},
+              {
+                "name": "idman-substage",
+                "formData": {
+                        "sport": {"answer": "Bəli", "weight": 0},
+                        "whichSport": ["Futbol", "Güləş", "Basketbol", "Atletika"],
+                        "professionals": [
+                                {"whichScore": {"answer": "Respublika", "weight": 0.03},"whichPlace": {"answer": "2-ci yer", "weight": 0.2},"name": "Futbol","level": {"answer": "Peşəkar", "weight": 0.03},},
+                                {"whichScore": {"answer": "Rayon", "weight": 1},"whichPlace": {"answer": "1-ci yer", "weight": 0.1},"name": "Atletika","level": {"answer": "Peşəkar", "weight": 0.03},},
+                                ],
+                                
+                        "amateurs": [
+                                {"level": {"answer": "Həvəskar", "weight": 0.3}, "name": "Güləş"},
+                                {"level": {"answer": "Həvəskar", "weight": 0.3}, "name": "Basketbol"},
+                                ],
+                        },
+                },
               {"name":"is-tecrubesi-substage","formData":{"experiences":[{"haveExperience":"0","company":"as","profession":"asd","workingActivityForm":{"id":225,"answer":"Fiziki əmək"},"degreeOfProfes":{"id":231,"answer":"Mütəxəssis"},"startDate":"2023-07-19","endDate":"2023-07-14","currentWorking":False},{"company":"asda","profession":"saxc","workingActivityForm":{"id":226,"answer":"Sənət"},"degreeOfProfes":{"id":231,"answer":"Mütəxəssis"},"startDate":"2023-06-29","endDate":"","currentWorking":True}]}},
               {"name":"proqram-bilikleri-substage",
                "formData":{
@@ -187,6 +174,35 @@ test_data  = [{"name":"umumi-suallar","formData":{"firstName":"a","lastName":"a"
                                 }
                 }
         ]
+
+def get_sport_skills_score(user):
+    userdata = test_data[7]["formData"]
+
+    if userdata != {}:
+        pesekar_score = 1
+        heveskar_score = 1
+
+        for sport in userdata["professionals"]:
+            if userdata["professionals"] != []:
+                # name = sport['name']
+                level_weight = sport['level']['weight']
+                score_weight = sport['whichScore']['weight']
+                place_weight = sport['whichPlace']['weight']
+                pesekar_score *= place_weight * score_weight * level_weight
+        # print("pesekar score: ", pesekar_score)
+        # print("\n")
+
+        heveskar_score = 1
+        for sport in userdata["amateurs"]:
+            if userdata["amateurs"] != []:
+                heveskar_score *= sport['level']['weight']
+        # print("heveskar score: ", heveskar_score)
+        # print("\n")
+        
+        if pesekar_score * heveskar_score != 1:
+            sport_score = pesekar_score * heveskar_score
+            return sport_score
+
 
 # get score weights for "proqram-bilikleri-substage"
 def get_programming_skills_score(user):
