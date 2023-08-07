@@ -161,7 +161,7 @@ def user(request):
 
 class UserScoreAPIView(APIView):
     def get(self, request, username):
-        user = models.UserAccount.objects.filter(username = username).only("username", "user_info").first()
+        user = models.UserAccount.objects.filter(email = username).only("email", "user_info").first()
         tehsil_score = get_education_score(user)
         skills_score = get_skills_score(user)
         language_score = get_language_score(user) 
