@@ -1,6 +1,9 @@
+import os
 from django.db import models
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import BaseUserManager
+from django.core.files.storage import default_storage
+from django.dispatch import receiver
 from django.utils.text import slugify
 
 
@@ -139,3 +142,49 @@ class UserAccount(AbstractBaseUser):
         return self.email
 
 
+def file_directory(instance, filname):
+    return "report{0}{1}".format(instance.id, filname)
+
+
+class UserProfile(models.Model):
+    user = models.ForeignKey(
+        'app.UserAccount', models.CASCADE
+    )
+    report_file = models.FileField(upload_to='images/') 
+
+    def __str__(self) -> str:
+        return self.user.email 
+    
+    def delete(self,*args,**kwargs):
+        default_storage.delete(self.report_file.name)
+        super().delete(*args, **kwargs)
+
+# @receiver(models.signals.post_delete, sender=UserProfile)
+# def auto_delete_file_on_delete(sender, instance, **kwargs):
+#     """
+#     Deletes file from filesystem
+#     when corresponding `MediaFile` object is deleted.
+#     """
+#     if instance.file:
+#         if os.path.isfile(instance.file.path):
+#             os.remove(instance.file.path)
+
+# @receiver(models.signals.pre_save, sender=UserProfile)
+# def auto_delete_file_on_change(sender, instance, **kwargs):
+#     """
+#     Deletes old file from filesystem
+#     when corresponding `MediaFile` object is updated
+#     with new file.
+#     """
+#     if not instance.pk:
+#         return False
+
+#     try:
+#         old_file = UserProfile.objects.get(pk=instance.pk).file
+#     except UserProfile.DoesNotExist:
+#         return False
+
+#     new_file = instance.file
+#     if not old_file == new_file:
+#         if os.path.isfile(old_file.path):
+#             os.remove(old_file.path)

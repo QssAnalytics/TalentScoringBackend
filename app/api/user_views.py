@@ -146,19 +146,6 @@ def user(request):
     return response.Response(serializer.data)
 
 
-
-# class UserEducationScoreApiView(APIView):
-#     def get(self, request, username):
-#         user = models.UserAccount.objects.filter(username = username).first()
-#         tehsil_score_exists = any("tehsil_score" in item for item in user.user_info)
-#         if not tehsil_score_exists:
-#             user, tehsil_score = get_education_score(user)
-#             user.user_info.append({"tehsil_score":tehsil_score})
-#             user.save()
-#             return response.Response({"user-info":user.user_info})
-#         return response.Response({"user-info":user.user_info})
-
-
 class UserScoreAPIView(APIView):
     def get(self, request, username):
         user = models.UserAccount.objects.filter(email = username).only("email", "user_info").first()

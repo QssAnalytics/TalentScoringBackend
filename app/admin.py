@@ -52,3 +52,4 @@ class AnswerAdmin(admin.ModelAdmin):
 
 
 admin.site.register(model.UserAccount) 
+admin.site.register(model.UserProfile) 
