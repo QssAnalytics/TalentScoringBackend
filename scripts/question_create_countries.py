@@ -27,12 +27,21 @@ def azerbaijani_locale_sort(country_names):
     # Sort the country names using the Azerbaijani locale
     sorted_country_names = sorted(country_names, key=locale.strxfrm)
     return sorted_country_names
+
+
 def run():
-    q = Question.objects.filter(question_title="pilləsi barədə məlumatları qeyd edin:").first()
+    q = Question.objects.filter(question_title="təhsilinizlə bağlı detalları qeyd edin:").first()
     print(q)
 
-    country_names = lst
-    sorted_country_names = azerbaijani_locale_sort(country_names)
+    path = "C:/Users/Nazim/Downloads/Ölkələr (1).csv"
+    df = pd.read_csv(path)
+    
+    new_answers = []
+    for id, country in df.iterrows():
+        new_answers.append(country.Country)
+
+    sorted_country_names = azerbaijani_locale_sort(new_answers)
+    print(sorted_country_names)
 
     for country in sorted_country_names:
         # print(country)
@@ -69,12 +78,6 @@ def run():
     # q = Question.objects.filter(question_title = "pilləsi barədə məlumatları qeyd edin:").first()
     # print(q)
 
-    # path = "C:/Users/Nazim/Downloads/Ölkələr (1).csv"
-    # df = pd.read_csv(path)
-    
-    # new_answers = []
-    # for id, country in df.iterrows():
-    #     new_answers.append(country.Country)
     # new_answers = sorted(new_answers, key=lambda x: [azerbaijani_alphabet_order(c) for c in x])
     
     # for country in new_answers:

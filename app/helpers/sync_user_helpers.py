@@ -14,17 +14,25 @@ def check(data, key):
                         return float(data[key]["answer_weight"])
         return 1
 
-def get_education_score(user: user_account_type,stage1,stage2,stage3):
-        user_info =  user.user_info
-        work_activite_weight = check(data = stage1["formData"], key = "curOccupation")
-        education_weight = check(stage1["formData"]["education"], key = "master")
-        education_grand_weight = check(data = stage1["formData"], key = "educationGrant")
-        olimp_highest_weight = check(data = stage3["formData"], key = "highestOlympiad")
-        olimp_rank_weight = check(data = stage3["formData"], key = "rankOlympiad")
+def get_education_score(user: user_account_type):
+        # user_info =  user.user_info
+        for stage in user.user_info:
+            if stage['name'] == 'umumi-suallar':
+                umumi_stage = stage
+            if stage['name'] == 'orta-texniki-ve-ali-tehsil-suallari':
+                education_stage = stage
+            if stage['name'] == 'olimpiada-suallar':
+                olimpia_stage = stage
+                
+        work_activite_weight = check(data = umumi_stage["formData"], key = "curOccupation")
+        education_weight = check(umumi_stage["formData"]["education"], key = "master")
+        education_grand_weight = check(data = umumi_stage["formData"], key = "educationGrant")
+        olimp_highest_weight = check(data = olimpia_stage["formData"], key = "highestOlympiad")
+        olimp_rank_weight = check(data = olimpia_stage["formData"], key = "rankOlympiad")
         max_bachelor_weight = 1
         max_master_weight = 1
         max_phd_weight = 1
-        userdata = stage2["formData"]["EducationScore"]
+        userdata = education_stage["formData"]["EducationScore"]
         bachelor_weight_list = []
         master_weight_list = []
         phd_weight_list = []
