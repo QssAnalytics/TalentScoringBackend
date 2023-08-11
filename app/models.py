@@ -1,4 +1,5 @@
-import os
+import environ, os, ast
+from cryptography.fernet import Fernet
 from django.db import models
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import BaseUserManager
@@ -11,11 +12,9 @@ class Answer(models.Model):
     questionIdd = models.ForeignKey(
         "app.Question", on_delete=models.CASCADE, related_name='answers')
     answer_title = models.CharField(max_length=100, null=True, blank=True)
-    answer_weight = models.DecimalField(max_digits=9,
-                                        decimal_places=4,
-                                        null=True,
-                                        blank=True)
-    
+
+    answer_weight = models.CharField(max_length=150,  null=True, blank=True)
+    answer_weight_for_hashing = models.CharField(max_length=150, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     answer_dependens_on = models.ForeignKey('self', on_delete=models.PROTECT,
@@ -28,10 +27,20 @@ class Answer(models.Model):
         verbose_name_plural = 'Answers'
 
 
+    def save(self, *args, **kwargs):
+        env = environ.Env()
+        environ.Env.read_env()
+        hash_key = ast.literal_eval(env("hash_key"))
+        cipher = Fernet(hash_key)
+        self.answer_weight = cipher.encrypt(self.answer_weight_for_hashing.encode())
+        return super().save(*args, **kwargs)
+
     def get_stage_slug(self):
         if self.stage_fit is not None:
             return self.stage_fit.slug
         return None
+    
+
     def __str__(self):
         if self.questionIdd_id:
             return "answer={}; question={}".format(self.answer_title, self.questionIdd.question_title)
@@ -156,7 +165,7 @@ class UserProfile(models.Model):
         return self.user.email 
     
     def delete(self,*args,**kwargs):
-        default_storage.delete(self.report_file.name)
+        self.report_file.delete(save=False)
         super().delete(*args, **kwargs)
 
 # @receiver(models.signals.post_delete, sender=UserProfile)
