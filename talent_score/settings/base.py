@@ -29,6 +29,7 @@ INSTALLED_APPS = [
     'drf_spectacular',
     'debug_toolbar',
     'adrf',
+    'django_extensions',
     
     # 'asgiref',
     'app',

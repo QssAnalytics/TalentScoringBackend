@@ -162,12 +162,31 @@ def user(request):
 class UserScoreAPIView(APIView):
     def get(self, request, username):
         user = models.UserAccount.objects.filter(email = username).only("email", "user_info").first()
-        tehsil_score = get_education_score(user)
-        skills_score = get_skills_score(user)
-        language_score = get_language_score(user) 
-        experience_score = get_experience_score(user)
-        programming_skills_score = get_programming_skills_score(user)
-        sports_score = get_sport_skills_score(user)
+        
+        for stage in user.user_info:
+            if stage['name'] == 'umumi-suallar':
+                umumi_stage = stage
+            if stage['name'] == 'orta-texniki-ve-ali-tehsil-suallari':
+                education_stage = stage
+            if stage['name'] == 'olimpiada-suallar':
+                olimpia_stage = stage
+            
+            if stage['name'] == 'is-tecrubesi-substage':
+                experience_score = get_experience_score(stage)
+            
+            if stage['name'] == 'xususi-bacariqlar-substage':
+                skills_score = get_skills_score(stage)
+
+            if stage['name'] == 'dil-bilikleri-substage':
+                language_score = get_language_score(stage) 
+
+            if stage['name'] == 'proqram-bilikleri-substage':
+                programming_skills_score = get_programming_skills_score(stage)
+            
+            if stage['name'] == 'idman-substage':
+                sports_score = get_sport_skills_score(stage)
+            # print('stage',stage)
+        tehsil_score = get_education_score(user,umumi_stage,education_stage,olimpia_stage)
         return response.Response({"user_info":user.user_info, "special_skills_weight":skills_score, "language_score":language_score,
                                     "experience_score":experience_score, "tehsil_score":tehsil_score, 'programming_skills_score':programming_skills_score,
                                     "sports_score":sports_score})
