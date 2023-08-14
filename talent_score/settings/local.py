@@ -10,7 +10,6 @@ DATABASES = {
 }
 
 CORS_ALLOWED_ORIGINS = [
-    'https://talentscoringbackend-production.up.railway.app',
     'http://localhost:3000',
     'http://localhost:5174',
     'http://127.0.0.1:5173',
@@ -25,7 +24,6 @@ CORS_ALLOW_CREDENTIALS = True
 CSRF_COOKIE_SECURE = True
 CSRF_COOKIE_HTTP_ONLY = True
 CSRF_TRUSTED_ORIGINS = [
-    'https://talentscoringbackend-production.up.railway.app/',
     'http://localhost:3000/',
     'http://127.0.0.1:5173/',
     'http://localhost:5173/',

@@ -1,5 +1,5 @@
 from django.urls import path, include
-from app.api import question_views, user_views, answer_views, stage_views
+from app.api import question_views, user_views, answer_views, stage_views, repot_views
 
 from django.contrib import admin
 urlpatterns = [
@@ -25,5 +25,7 @@ urlpatterns = [
     
     path('stage-parent-lists/', stage_views.StageParentListApiView.as_view(), name = 'parent-stage-api'),
     path('stage-child-lists/', stage_views.StageChildListApiView.as_view(), name = 'child-stage-api'),
+
+    path('upload-report/', repot_views.ReportUploadAPIView.as_view())
 
 ]

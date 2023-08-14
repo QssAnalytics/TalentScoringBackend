@@ -1,19 +1,16 @@
 import environ, os
-
 from pprint import pprint
 from pathlib import Path
 from datetime import timedelta
+
 env = environ.Env()
 environ.Env.read_env()
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
-
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 DEBUG = True
 
 
-
-SECRET_KEY = 'django-insecure-xee+ko&ew1x^27)yih!69%gh5=)e=t6n-l3ugbth4m!asr1$k)' #os.getenv("SECRET_KEY") 
+SECRET_KEY = env("SECRET_KEY")
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -37,15 +34,12 @@ INSTALLED_APPS = [
 ]
 
 INTERNAL_IPS = [
-    # ...
     "127.0.0.1",
-    # ...
 ]
 
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
-    # 'asgiref.contrib.django.middleware.AsyncToSyncMiddleware',
     "debug_toolbar.middleware.DebugToolbarMiddleware",
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -161,3 +155,30 @@ SIMPLE_JWT = {
     # Whether to set the flag restricting cookie leaks on cross-site requests. This can be 'Lax', 'Strict', or None to disable the flag.
     'AUTH_COOKIE_SAMESITE': "Lax", # TODO: Modify to Lax
 }
+
+USE_S3 = True
+
+if USE_S3:
+    # aws settings
+    
+    AWS_ACCESS_KEY_ID = env("AWS_ACCESS_KEY_ID")
+    AWS_SECRET_ACCESS_KEY = env("AWS_SECRET_ACCESS_KEY")
+    AWS_STORAGE_BUCKET_NAME = env("AWS_STORAGE_BUCKET_NAME")
+    AWS_DEFAULT_ACL = 'public-read'
+    AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
+    AWS_S3_OBJECT_PARAMETERS = {'CacheControl': 'max-age=86400'}
+    # s3 static settings
+    AWS_LOCATION = 'static'
+    STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{AWS_LOCATION}/'
+    STATICFILES_STORAGE = 'app.storages.StaticStorage'
+    PUBLIC_MEDIA_LOCATION = 'media'
+    MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{PUBLIC_MEDIA_LOCATION}/'
+    DEFAULT_FILE_STORAGE = 'app.storages.MediaStorage'
+else:
+    STATIC_URL = '/staticfiles/'
+    STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')

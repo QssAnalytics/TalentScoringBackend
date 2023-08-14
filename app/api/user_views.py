@@ -14,9 +14,6 @@ from asgiref.sync import sync_to_async
 from app import models
 # from app.helpers.async_user_helpers import *
 from app.helpers.sync_user_helpers import *
-
-from adrf.views import APIView as AsyncAPIView
-
 from app.serializers import user_serializers
 # Create your views here.
 env = environ.Env()
@@ -147,19 +144,6 @@ def user(request):
 
     serializer = user_serializers.UserAccountSerializer(user)
     return response.Response(serializer.data)
-
-
-
-# class UserEducationScoreApiView(APIView):
-#     def get(self, request, username):
-#         user = models.UserAccount.objects.filter(username = username).first()
-#         tehsil_score_exists = any("tehsil_score" in item for item in user.user_info)
-#         if not tehsil_score_exists:
-#             user, tehsil_score = get_education_score(user)
-#             user.user_info.append({"tehsil_score":tehsil_score})
-#             user.save()
-#             return response.Response({"user-info":user.user_info})
-#         return response.Response({"user-info":user.user_info})
 
 class UserInfoPost(APIView):
     def post(self,request):

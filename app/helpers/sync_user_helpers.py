@@ -281,7 +281,6 @@ def get_programming_skills_score(stagedata):
         # find multiplication of all category scores except minimum one
         category_scores = []
         for category in userdata:
-                # max 4 decimal points 
                 result[f'{category}Score'] = round(result[f'{category}Score'], 4)
                 category_score = result[f'{category}Score']
                 category_scores.append(category_score)
@@ -291,16 +290,15 @@ def get_programming_skills_score(stagedata):
         if len(set(category_scores)) == 1:
                 print(f"All category scores are the same. min is {min(category_scores)}")
         else:
-                # deleting minimum category score
                 minimum_score = min(category_scores)
                 category_scores.remove(minimum_score)
                 programming_skills_score = 1
-                a=0
+
                 if category_scores != []:        
                         for score in category_scores:
                                 if 0.5 < score <= 1:
                                         programming_skills_score *= 0.9
-                                        a+=1
+                                        
 
                                 elif 0.3 < score <= 0.5:
                                         programming_skills_score *= 0.8
