@@ -37,6 +37,14 @@ class StageChildListSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
+class StageObjectSerializer(serializers.ModelSerializer):
+    stage_children = RecursiveSerializer(many = True, read_only = True)
+
+    class Meta:
+        model = models.Stage
+        fields = "__all__"
+
+
 
 # class StageQuestionListSerializer(serializers.ModelSerializer):
 #     questions = QuestionListSerializer(many=True, read_only=True) 

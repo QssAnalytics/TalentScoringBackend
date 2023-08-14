@@ -12,10 +12,16 @@ urlpatterns = [
     path('get-summry-prompt/', user_views.SummryPromptAPIView.as_view()),
     path('get-experiance-prompt/', user_views.ExperiancePromptAPIView.as_view()),
     path('get-job-title-prompt/', user_views.JobTitleAPIView.as_view()),
-
+    ###
+    path('user-info-post/', user_views.UserInfoPost.as_view()),
+    ###
+    
     path('get-question/', question_views.GetQuestionApiView.as_view()),
     path('question-lists/<slug:slug>/',stage_views.StageQuestionViewSet.as_view({'get':'list'})),
     path('question-lists/<slug:slug>/<int:pk>/',stage_views.StageQuestionViewSet.as_view({'get':'retrieve'})),
+    ###
+    path('stage-object/<slug:slug>/',stage_views.StageObjectApiView.as_view()),
+    ###
     
     path('stage-parent-lists/', stage_views.StageParentListApiView.as_view(), name = 'parent-stage-api'),
     path('stage-child-lists/', stage_views.StageChildListApiView.as_view(), name = 'child-stage-api'),

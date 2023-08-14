@@ -1,24 +1,6 @@
 from app.models import Question, Answer
 import pandas as pd
 
-# import requests
-# from bs4 import BeautifulSoup
-# import PyPDF2
-# import re
-
-# def extract_headers_from_pdf(pdf_path, start_page, end_page):
-#     with open(pdf_path, 'rb') as pdf_file:
-#         pdf_reader = PyPDF2.PdfReader(pdf_file)
-#         all_text = ''
-#         for page_number in range(start_page - 1, end_page):  # Page numbers are 0-based
-#             page = pdf_reader.pages[page_number]
-#             all_text += page.extract_text()
-#         return all_text
-
-# def extract_columns(headers_text):
-#     headers = re.findall(r'\w+\s+\w+', headers_text)
-#     return headers
-
 import locale
 
 def azerbaijani_locale_sort(country_names):
@@ -33,15 +15,8 @@ def run():
     q = Question.objects.filter(question_title="təhsilinizlə bağlı detalları qeyd edin:").first()
     print(q)
 
-    path = "C:/Users/Nazim/Downloads/Ölkələr (1).csv"
-    df = pd.read_csv(path)
-    
-    new_answers = []
-    for id, country in df.iterrows():
-        new_answers.append(country.Country)
-
-    sorted_country_names = azerbaijani_locale_sort(new_answers)
-    print(sorted_country_names)
+    country_names = lst
+    sorted_country_names = azerbaijani_locale_sort(country_names)
 
     for country in sorted_country_names:
         # print(country)
@@ -78,6 +53,12 @@ def run():
     # q = Question.objects.filter(question_title = "pilləsi barədə məlumatları qeyd edin:").first()
     # print(q)
 
+    # path = "C:/Users/Nazim/Downloads/Ölkələr (1).csv"
+    # df = pd.read_csv(path)
+    
+    # new_answers = []
+    # for id, country in df.iterrows():
+    #     new_answers.append(country.Country)
     # new_answers = sorted(new_answers, key=lambda x: [azerbaijani_alphabet_order(c) for c in x])
     
     # for country in new_answers:

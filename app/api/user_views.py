@@ -1,9 +1,12 @@
 import math, pandas as pd, openai, environ, json
+from django.db import DatabaseError
+from django.forms import EmailField
 from django.shortcuts import render
 from django.contrib.auth import authenticate, login
 from django.middleware import csrf
+from django.core.exceptions import ObjectDoesNotExist
 from rest_framework.views import APIView
-from rest_framework import exceptions as rest_exceptions, response, decorators as rest_decorators, permissions as rest_permissions
+from rest_framework import exceptions as rest_exceptions, response, decorators as rest_decorators, permissions as rest_permissions, status as rest_status
 from rest_framework_simplejwt import tokens, views as jwt_views, serializers as jwt_serializers, exceptions as jwt_exceptions
 from drf_yasg.utils import swagger_auto_schema
 from django.conf import settings
@@ -157,6 +160,24 @@ def user(request):
 #             user.save()
 #             return response.Response({"user-info":user.user_info})
 #         return response.Response({"user-info":user.user_info})
+
+class UserInfoPost(APIView):
+    def post(self,request):
+        email = request.data.get('email')
+        user_info = request.data.get('user_info')
+        print(type(user_info))
+        try:
+            user = UserAccount.objects.get(email=email)
+        except UserAccount.DoesNotExist:
+            return response.Response(status=rest_status.HTTP_404_NOT_FOUND)
+        except DatabaseError as db_error:
+            return response.Response(status=rest_status.HTTP_500_INTERNAL_SERVER_ERROR)
+        formatted_user_info = json.dumps(user_info)
+        print(type(formatted_user_info))
+        user.user_info = user_info
+        user.save()
+
+        return response.Response({"user_info":user.user_info},status=rest_status.HTTP_200_OK)
 
 
 class UserScoreAPIView(APIView):
