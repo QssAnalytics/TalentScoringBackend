@@ -11,9 +11,6 @@ from asgiref.sync import sync_to_async
 from app import models
 # from app.helpers.async_user_helpers import *
 from app.helpers.sync_user_helpers import *
-
-from adrf.views import APIView as AsyncAPIView
-
 from app.serializers import user_serializers
 # Create your views here.
 env = environ.Env()

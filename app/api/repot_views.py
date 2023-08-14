@@ -8,14 +8,14 @@ from app.models import UserAccount
 from app.serializers.report_serializers import ReportUploadSerializer
 
 class ReportUploadAPIView(APIView):
-    # parser_classes = (MultiPartParser,)
+    parser_classes = (MultiPartParser,)
 
     def post(self, request, *args, **kwargs):
         # print(request.data.get('report_file'))
-        req_data = request.data.get('report_file')
-        format, imgstr = req_data.split(';base64,') 
-        ext = format.split('/')[-1] 
-        cont_data = ContentFile(base64.b64decode(imgstr), name='temp.' + ext)
+        # req_data = request.data.get('report_file')
+        # format, imgstr = req_data.split(';base64,') 
+        # ext = format.split('/')[-1] 
+        # cont_data = ContentFile(base64.b64decode(imgstr), name='temp.' + ext)
        
         try:
           email = request.data.get('email')
@@ -23,8 +23,8 @@ class ReportUploadAPIView(APIView):
         except UserAccount.DoesNotExist:
             return Response({'error': 'User not found with the provided email.'}, status=status.HTTP_404_NOT_FOUND)
         
-        # data = {'user': user.id, 'report_file': request.data.get('report_file')}
-        data = {'user': user.id, 'report_file': cont_data}
+        data = {'user': user.id, 'report_file': request.data.get('report_file')}
+        # data = {'user': user.id, 'report_file': cont_data}
 
         file_serializer = ReportUploadSerializer(data=data)
 

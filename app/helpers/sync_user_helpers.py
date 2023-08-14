@@ -189,15 +189,12 @@ def get_sport_skills_score(user):
                 score_weight = sport['whichScore']['weight']
                 place_weight = sport['whichPlace']['weight']
                 pesekar_score *= place_weight * score_weight * level_weight
-        # print("pesekar score: ", pesekar_score)
-        # print("\n")
 
         heveskar_score = 1
         for sport in userdata["amateurs"]:
             if userdata["amateurs"] != []:
                 heveskar_score *= sport['level']['weight']
-        # print("heveskar score: ", heveskar_score)
-        # print("\n")
+
         
         if pesekar_score * heveskar_score != 1:
             sport_score = pesekar_score * heveskar_score
@@ -242,7 +239,6 @@ def get_programming_skills_score(user):
         else:
                 result["msOfficeScore"] = 0
         
-        # print("msOfficeScore",result["msOfficeScore"])
         
         # Calculating Scores of design,programs, others categories       
         level_scores_mapping = {
@@ -330,32 +326,24 @@ def get_programming_skills_score(user):
         # find multiplication of all category scores except minimum one
         category_scores = []
         for category in userdata:
-                # max 4 decimal points 
                 result[f'{category}Score'] = round(result[f'{category}Score'], 4)
                 category_score = result[f'{category}Score']
                 category_scores.append(category_score)
-                # print(f'{category}Score:', category_score)
-                # calculating overall programming skills score
-        print(category_scores) 
+
         # Check if all category scores are the same
         # calculate overall programming skills score
         if len(set(category_scores)) == 1:
                 print(f"All category scores are the same. min is {min(category_scores)}")
         else:
-                # print("Category scores are different.")
-                # deleting minimum category score
-                
-                # print('index',category_scores.index(min(category_scores)))
                 minimum_score = min(category_scores)
                 category_scores.remove(minimum_score)
                 programming_skills_score = 1
-                a=0
+
                 if category_scores != []:        
                         for score in category_scores:
                                 if 0.5 < score <= 1:
                                         programming_skills_score *= 0.9
-                                        a+=1
-                                        # print(programming_skills_score)
+                                        
 
                                 elif 0.3 < score <= 0.5:
                                         programming_skills_score *= 0.8
