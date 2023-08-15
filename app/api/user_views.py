@@ -149,7 +149,7 @@ class UserInfoPost(APIView):
     def post(self,request):
         email = request.data.get('email')
         user_info = request.data.get('user_info')
-        print(type(user_info))
+        # print(type(user_info))
         try:
             user = UserAccount.objects.get(email=email)
         except UserAccount.DoesNotExist:
@@ -157,7 +157,7 @@ class UserInfoPost(APIView):
         except DatabaseError as db_error:
             return response.Response(status=rest_status.HTTP_500_INTERNAL_SERVER_ERROR)
         formatted_user_info = json.dumps(user_info)
-        print(type(formatted_user_info))
+        # print(type(formatted_user_info))
         user.user_info = user_info
         user.save()
 

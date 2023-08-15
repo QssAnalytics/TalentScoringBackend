@@ -75,6 +75,5 @@ class StageObjectApiView(APIView):
 
         stage = Stage.objects.filter(slug=slug).first()
         serializer = StageObjectSerializer(stage)
-        # serializer
 
         return Response(serializer.data)

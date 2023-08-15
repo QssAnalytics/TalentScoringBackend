@@ -24,7 +24,7 @@ class AnswerTabularInline(admin.TabularInline):
 class QuestionAdmin(admin.ModelAdmin):
     list_display = ('question_title', 'stage', 'question_dependens_on_answer','question_index', 'question_type')
     inlines = [AnswerTabularInline]
-    search_fields = ('question_title', 'question_dependens_on_question')
+    search_fields = ('question_title', 'question_dependens_on_question__question_title')
     raw_id_fields = ('question_dependens_on_answer', 'question_dependens_on_question')
     # def get_queryset(self, request: HttpRequest) -> QuerySet[Any]:
     #     return super().get_queryset(request).select_related('question_dependens_on_answer', "question_dependens_on_question")
