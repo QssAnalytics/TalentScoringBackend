@@ -36,7 +36,7 @@ class StageAdmin(admin.ModelAdmin):
 
 @admin.register(model.Answer)
 class AnswerAdmin(admin.ModelAdmin):
-    search_fields= ('answer_title',)
+    search_fields= ('answer_title','questionIdd__question_title')
     autocomplete_fields = ['answer_dependens_on']
     list_display = ('answer_title', 'get_question_title', 'answer_weight')
 

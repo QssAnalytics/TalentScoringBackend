@@ -32,7 +32,8 @@ class Answer(models.Model):
         environ.Env.read_env()
         hash_key = ast.literal_eval(env("hash_key"))
         cipher = Fernet(hash_key)
-        self.answer_weight = cipher.encrypt(self.answer_weight_for_hashing.encode())
+        if self.answer_weight_for_hashing is not None:
+            self.answer_weight = cipher.encrypt(self.answer_weight_for_hashing.encode())
         return super().save(*args, **kwargs)
 
     def get_stage_slug(self):
