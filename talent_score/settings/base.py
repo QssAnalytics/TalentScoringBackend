@@ -25,6 +25,10 @@ INSTALLED_APPS = [
     'drf_yasg',
     'drf_spectacular',
     'debug_toolbar',
+    'adrf',
+    'django_extensions',
+    
+    # 'asgiref',
     'app',
 
 ]

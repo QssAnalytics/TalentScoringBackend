@@ -15,16 +15,24 @@ def check(data, key):
         return 1
 
 def get_education_score(user: user_account_type):
-        user_info =  user.user_info
-        work_activite_weight = check(data = user_info[0]["formData"], key = "curOccupation")
-        education_weight = check(user_info[0]["formData"]["education"], key = "master")
-        education_grand_weight = check(data = user_info[0]["formData"], key = "educationGrant")
-        olimp_highest_weight = check(data = user_info[2]["formData"], key = "highestOlympiad")
-        olimp_rank_weight = check(data = user_info[2]["formData"], key = "rankOlympiad")
+        # user_info =  user.user_info
+        for stage in user.user_info:
+            if stage['name'] == 'umumi-suallar':
+                umumi_stage = stage
+            if stage['name'] == 'orta-texniki-ve-ali-tehsil-suallari':
+                education_stage = stage
+            if stage['name'] == 'olimpiada-suallar':
+                olimpia_stage = stage
+                
+        work_activite_weight = check(data = umumi_stage["formData"], key = "curOccupation")
+        education_weight = check(umumi_stage["formData"]["education"], key = "master")
+        education_grand_weight = check(data = umumi_stage["formData"], key = "educationGrant")
+        olimp_highest_weight = check(data = olimpia_stage["formData"], key = "highestOlympiad")
+        olimp_rank_weight = check(data = olimpia_stage["formData"], key = "rankOlympiad")
         max_bachelor_weight = 1
         max_master_weight = 1
         max_phd_weight = 1
-        userdata = user_info[1]["formData"]["EducationScore"]
+        userdata = education_stage["formData"]["EducationScore"]
         bachelor_weight_list = []
         master_weight_list = []
         phd_weight_list = []
@@ -57,8 +65,8 @@ def get_education_score(user: user_account_type):
         
 
 
-def get_experience_score(user: user_account_type):
-        userdata = user.user_info[3]["formData"]["experiences"]
+def get_experience_score(stagedata):
+        userdata = stagedata["formData"]["experiences"]
         experiance_score = 1
         if len(userdata)>0:
                 workingform = {"Fiziki əmək":1, "Sənət":2, "Ali ixtisas":3, "Sahibkar":4}
@@ -88,95 +96,45 @@ def get_experience_score(user: user_account_type):
         return experiance_score
 
 
-def get_skills_score(user):
-
-        userdata = user.user_info[4]["formData"]["specialSkills"]
-        lst=[]
-        heveskar_count = 0
-        pesekar_count = 0
-
-        for data in userdata:
-                lst.append(data['talent_level'])
-                if data['talent_level'] == 'heveskar':
-                        heveskar_answer_weight = data['answer_weight']
-                elif data['talent_level'] == 'pesekar':
-                        pesekar_answer_weight = data['answer_weight']
-
-        for value in lst:
-                if value=='heveskar':
-                        heveskar_count += 1
-                elif value=='pesekar':
-                        pesekar_count += 1
-
-        formula_result = (heveskar_count**heveskar_answer_weight) * (pesekar_count**pesekar_answer_weight)
-        return formula_result
-
-def get_language_score(user):
-
-        userdata = user.user_info[5]["formData"]["languageSkills"]
-        total_language_weight = 1
-        if len(userdata) > 0:
+def get_skills_score(stagedata):
+        if stagedata['formData'] != {}:
+                userdata = stagedata["formData"]["specialSkills"]
+                lst=[]
+                heveskar_count = 0
+                pesekar_count = 0
+                formula_result = 1
                 for data in userdata:
-                        total_language_weight *= data['answer_weight']
+                        # print(data)
+                        lst.append(data['talent_level'])
+                        if data['talent_level'] == 'heveskar':
+                                heveskar_answer_weight = data['answer_weight']
+                        elif data['talent_level'] == 'pesekar':
+                                pesekar_answer_weight = data['answer_weight']
+
+                for value in lst:
+                        if value=='heveskar':
+                                heveskar_count += 1
+                        elif value=='pesekar':
+                                pesekar_count += 1
+
+                formula_result = (heveskar_count**heveskar_answer_weight) * (pesekar_count**pesekar_answer_weight)
+                return formula_result
+
+def get_language_score(stagedata):
+        if stagedata['formData'] != {}:
+                userdata = stagedata["formData"]["languageSkills"]
+                total_language_weight = 1
+                if len(userdata) > 0:
+                        for data in userdata:
+                                total_language_weight *= data['answer_weight']
+                        return total_language_weight
+                
                 return total_language_weight
-        
-        return total_language_weight
 
-test_data  = [{"name":"umumi-suallar","formData":{"firstName":"a","lastName":"a","workExp":"1","curOccupation":{"id":4,"answer":"Çalışıram"},"education":{"id":10,"answer":"Peşə təhsili"},"educationGrant":{"id":14,"answer":"Əlaçı"}}},
-              {"name":"orta-texniki-ve-ali-tehsil-suallari","formData":{"vocationalScore":"3","bachelorsScore":"","masterScore":"","phdScore":""}},
-              {"name":"olimpiada-suallar","formData":{"wonOlympics":"0","subjectOlympiad":{"id":21,"answer":"Tarix"},"highestOlympiad":{"id":28,"answer":"Rayon"},"rankOlympiad":{"id":32,"answer":"2-ci yer (Gümüş medal)"}}},
-              {"name":"dil-bilikleri-substage","formData":{"haveLanguageSkills":"0","languageSkills":["İngilis dili","Rus dili"],"enlangCert":"2","engLevel":"4","ruLevel":"1"}},
-              {"name":"elave-dil-bilikleri-substage","formData":{"langs":[{"addLang":{"id":133,"answer":"İspan dili"},"levelLang":"B2 (Orta)","haveCertLang":"Xeyr"},{"addLang":{"id":135,"answer":"Yapon dili"},"levelLang":"B2 (Orta)","haveCertLang":"Bəli","certLang":"ead"}]}},
-              {"name":"xususi-bacariqlar-substage","formData":{"haveSpecialSkills":"0","specialSkills":["Musiqi","Rəqs"],"levelSkill":"","certSkill":"","Musiqi":"0","Rəqs":"1"}},
-              {"name":"xususi-bacariqlar-sertifikat-substage","formData":{"musiqiCertifcate":"asdas","rəqsCertifcate":"asdasdas"}},
-              {
-                "name": "idman-substage",
-                "formData": {
-                        "sport": {"answer": "Bəli", "weight": 0},
-                        "whichSport": ["Futbol", "Güləş", "Basketbol", "Atletika"],
-                        "professionals": [
-                                {"whichScore": {"answer": "Respublika", "weight": 0.03},"whichPlace": {"answer": "2-ci yer", "weight": 0.2},"name": "Futbol","level": {"answer": "Peşəkar", "weight": 0.03},},
-                                {"whichScore": {"answer": "Rayon", "weight": 1},"whichPlace": {"answer": "1-ci yer", "weight": 0.1},"name": "Atletika","level": {"answer": "Peşəkar", "weight": 0.03},},
-                                ],
-                                
-                        "amateurs": [
-                                {"level": {"answer": "Həvəskar", "weight": 0.3}, "name": "Güləş"},
-                                {"level": {"answer": "Həvəskar", "weight": 0.3}, "name": "Basketbol"},
-                                ],
-                        },
-                },
-              {"name":"is-tecrubesi-substage","formData":{"experiences":[{"haveExperience":"0","company":"as","profession":"asd","workingActivityForm":{"id":225,"answer":"Fiziki əmək"},"degreeOfProfes":{"id":231,"answer":"Mütəxəssis"},"startDate":"2023-07-19","endDate":"2023-07-14","currentWorking":False},{"company":"asda","profession":"saxc","workingActivityForm":{"id":226,"answer":"Sənət"},"degreeOfProfes":{"id":231,"answer":"Mütəxəssis"},"startDate":"2023-06-29","endDate":"","currentWorking":True}]}},
-              {"name":"proqram-bilikleri-substage",
-               "formData":{
-                       'design': [
-                                { 'answer': "Canva", 'weight': None, 'level': { 'answer': 'Junior', 'weight': None } },
-                                {'answer': "Photoshop",'weight': None,'level': { 'answer': 'Middle', 'weight': None }},
-                                ],
-                        'msOffice': [
-                                { 'answer': "Word", 'weight': 1, 'level': { 'answer': "Middle", 'weight': 0.5 } },
-                                {'answer': "Excel", 'weight': 0.2, 'level': { 'answer': "Junior", 'weight': 0.7 },},
-                                {'answer': "PowerPoint",'weight': 0.4,'level': { 'answer': "Senior", 'weight': 0.3 },},
-                                ],
-                        'programs': [
-                                {'answer': "Python",'weight': None,'level': { 'answer': "Middle", 'weight': None },},
-                                {'answer': "Java",'weight': None,'level': { 'answer': "Middle", 'weight': None },},
-                                {'answer': "Kotlin",'weight': None,'level': { 'answer': "Middle", 'weight': None },},
-                                {'answer': "C/C++",'weight': None,'level': { 'answer': "Middle", 'weight': None },},
-                                {'answer': "C#",'weight': None,'level': { 'answer': "Middle", 'weight': None },},
-                                {'answer': "SQL",'weight': None,'level': { 'answer': "Middle", 'weight': None },},
-                                {'answer': "Javascript",'weight': None,'level': { 'answer': "Middle", 'weight': None },},
-                                {'answer': "Swift",'weight': None,'level': { 'answer': "Middle", 'weight': None },},
-                                {'answer': "HTML/CSS",'weight': None,'level': { 'answer': "Middle", 'weight': None },},
-                                ],
-                        'others': [
-                                {'answer': "Blender",'weight': None,'level': { 'answer': "Junior", 'weight': None },},
-                                ],
-                                }
-                }
-        ]
 
-def get_sport_skills_score(user):
-    userdata = test_data[7]["formData"]
+def get_sport_skills_score(stagedata):
+    if stagedata['formData'] != {}:
+        userdata = stagedata["formData"]
 
     if userdata != {}:
         pesekar_score = 1
@@ -184,7 +142,6 @@ def get_sport_skills_score(user):
 
         for sport in userdata["professionals"]:
             if userdata["professionals"] != []:
-                # name = sport['name']
                 level_weight = sport['level']['weight']
                 score_weight = sport['whichScore']['weight']
                 place_weight = sport['whichPlace']['weight']
@@ -194,18 +151,16 @@ def get_sport_skills_score(user):
         for sport in userdata["amateurs"]:
             if userdata["amateurs"] != []:
                 heveskar_score *= sport['level']['weight']
-
         
         if pesekar_score * heveskar_score != 1:
             sport_score = pesekar_score * heveskar_score
-            return sport_score
+            return round(sport_score, 10)
 
 
 # get score weights for "proqram-bilikleri-substage"
-def get_programming_skills_score(user):
+def get_programming_skills_score(stagedata):
 
-        # userdata = user.user_info[9]["formData"]
-        userdata = test_data[9]["formData"]
+        userdata = stagedata["formData"]
 
         result = {
                 'msOfficeScore':1,

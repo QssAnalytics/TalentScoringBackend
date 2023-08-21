@@ -8,7 +8,7 @@ from django.db import connection
 from django.db import reset_queries
 
 from app.models import Question,  Stage, Answer
-from app.serializers import StageQuestionListSerializer, StageParentListSerializer, StageChildListSerializer
+from app.serializers import StageQuestionListSerializer, StageParentListSerializer, StageChildListSerializer, StageObjectSerializer
 
 def database_debug(func):
     def inner_func(*args, **kwargs):
@@ -69,3 +69,11 @@ class StageChildListApiView(APIView):
 
         return Response(serializer.data)
     
+class StageObjectApiView(APIView):
+
+    def get(self, request, slug):
+
+        stage = Stage.objects.filter(slug=slug).first()
+        serializer = StageObjectSerializer(stage)
+
+        return Response(serializer.data)
