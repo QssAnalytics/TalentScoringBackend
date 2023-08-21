@@ -63,11 +63,43 @@ class UserAccount(AbstractBaseUser):
         return self.email
 
 
-class UserProfile(models.Model):
+# class UserProfile(models.Model):
+#     user = models.ForeignKey(
+#         'users.UserAccount', models.CASCADE
+#     )
+#     report_file = models.FileField(upload_to='images/') 
+
+#     def __str__(self) -> str:
+#         return self.user.email 
+    
+#     def delete(self,*args,**kwargs):
+#         self.report_file.delete(save=False)
+#         super().delete(*args, **kwargs)
+
+
+class ReportModel(models.Model):
     user = models.ForeignKey(
         'users.UserAccount', models.CASCADE
     )
-    report_file = models.FileField(upload_to='images/') 
+    user_info = models.JSONField(blank=True, null=True)
+    education_score = models.DecimalField(max_digits=16, decimal_places=13)
+    education_color = models.CharField(max_length=30, default='#00E5BC')
+    language_score = models.DecimalField(max_digits=16, decimal_places=13)
+    language_color = models.CharField(max_length=30, default='#FF0038')
+    special_skills_score = models.DecimalField(max_digits=16, decimal_places=13)
+    special_skills_color = models.CharField(max_length=30, default='#00A8E1')
+    sport_score = models.DecimalField(max_digits=16, decimal_places=13)
+    sport_color = models.CharField(max_length=30, default='#09959A')
+    work_experiance_score = models.DecimalField(max_digits=16, decimal_places=13)
+    work_experiance_color = models.CharField(max_length=30, default='#FFCB05')
+    program_score = models.DecimalField(max_digits=16, decimal_places=13)
+    program_color = models.CharField(max_length=30, default='#8800E0')
+
+    report_file = models.FileField(upload_to='images/', blank=True, null=True)
+
+    class Meta:
+        verbose_name = "ReportModel"
+        
 
     def __str__(self) -> str:
         return self.user.email 
@@ -75,4 +107,3 @@ class UserProfile(models.Model):
     def delete(self,*args,**kwargs):
         self.report_file.delete(save=False)
         super().delete(*args, **kwargs)
-

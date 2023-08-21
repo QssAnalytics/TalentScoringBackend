@@ -1,9 +1,9 @@
 # from app.models import UserProfile
 from rest_framework import serializers
 
-# from users.models import UserProfile
+from users.models import ReportModel
 
 class ReportUploadSerializer(serializers.ModelSerializer):
     class Meta:
-        # model = UserProfile
-        fields = ('user', 'report_file')
+        model = ReportModel
+        fields = "__all__"

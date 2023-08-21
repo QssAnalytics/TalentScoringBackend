@@ -211,7 +211,7 @@ class UserScoreAPIView(APIView):
 
             if stage["name"] == "idman-substage":
                 sports_score = get_sport_skills_score(stage)
-
+        
         return response.Response(
             {
                 "user_info": user.user_info,

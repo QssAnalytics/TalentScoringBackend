@@ -15,6 +15,7 @@ urlpatterns = [
     path('get-experiance-prompt/', user_views.ExperiancePromptAPIView.as_view()),
     path('get-job-title-prompt/', user_views.JobTitleAPIView.as_view()),
     path('user-info-post/', user_views.UserInfoPost.as_view()),
-    path('upload-report/', repot_views.ReportUploadAPIView.as_view())
+    path('upload-report/', repot_views.ReportUploadAPIView.as_view()),
+    path('get-report/', repot_views.ReportInfoAPIView.as_view())
 
 ]
