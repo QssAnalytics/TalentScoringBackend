@@ -19,19 +19,24 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+]
+
+PROJECT_APPS = [
+    'app.apps.AppConfig',
+    'users.apps.UsersConfig'
+]
+
+INSTALLED_PACKAGES = [
     'rest_framework',
     "corsheaders",
     'rest_framework_simplejwt.token_blacklist',
     'drf_yasg',
     'drf_spectacular',
     'debug_toolbar',
-    'adrf',
     'django_extensions',
-    
-    # 'asgiref',
-    'app',
-
 ]
+
+INSTALLED_APPS += PROJECT_APPS + INSTALLED_PACKAGES
 
 INTERNAL_IPS = [
     "127.0.0.1",
@@ -93,14 +98,14 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 ROOT_URLCONF = 'talent_score.urls'
 
-AUTH_USER_MODEL = 'app.UserAccount'
+AUTH_USER_MODEL = 'users.UserAccount'
 
 
 
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
         # 'rest_framework_simplejwt.authentication.JWTAuthentication', # TODO: For now
-        'app.authenticate.CustomAuthentication',
+        'users.authenticate.CustomAuthentication',
     ],
 
     "DEFAULT_PERMISSION_CLASSES": [

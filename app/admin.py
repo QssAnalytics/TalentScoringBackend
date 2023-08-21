@@ -10,7 +10,7 @@ from django.db import models
 
 class AnswerTabularInline(admin.TabularInline):
     model = model.Answer
-    fields = ('answer_title', 'answer_weight', 'answer_dependens_on', 'stage_fit')
+    fields = ('answer_title','answer_weight_for_hashing', 'answer_weight',  'answer_dependens_on', 'stage_fit')
     raw_id_fields = ('answer_dependens_on', 'stage_fit')
     fk_name = "questionIdd"
 
@@ -22,7 +22,7 @@ class AnswerTabularInline(admin.TabularInline):
 
 @admin.register(model.Question)
 class QuestionAdmin(admin.ModelAdmin):
-    list_display = ('question_title', 'stage', 'question_dependens_on_answer','question_index', 'question_type')
+    list_display = ('question_title', 'stage', 'question_index',  'question_type') 
     inlines = [AnswerTabularInline]
     search_fields = ('question_title', 'question_dependens_on_question__question_title')
     raw_id_fields = ('question_dependens_on_answer', 'question_dependens_on_question')
@@ -50,6 +50,3 @@ class AnswerAdmin(admin.ModelAdmin):
 
     get_question_title.short_description = 'Question'
 
-
-admin.site.register(model.UserAccount) 
-admin.site.register(model.UserProfile) 

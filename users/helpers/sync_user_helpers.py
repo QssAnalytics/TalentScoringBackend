@@ -1,7 +1,7 @@
 import numpy as np
 import math, time
 from typing import TypeVar
-from app.utils.user_utils import *
+from users.utils.user_utils import *
 
 from django.contrib.auth import get_user_model
 

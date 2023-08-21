@@ -1,11 +1,11 @@
-import base64, tempfile
+import base64
 from rest_framework.views import APIView
 from rest_framework.parsers import FileUploadParser, MultiPartParser
 from rest_framework import status
 from rest_framework.response import Response
 from django.core.files.base import ContentFile
-from app.models import UserAccount
-from app.serializers.report_serializers import ReportUploadSerializer
+from users.models import UserAccount
+from users.serializers.report_serializers import ReportUploadSerializer
 
 class ReportUploadAPIView(APIView):
     # parser_classes = (MultiPartParser,)

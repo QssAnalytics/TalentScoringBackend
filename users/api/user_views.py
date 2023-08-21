@@ -1,7 +1,6 @@
 import math, pandas as pd, openai, environ, json
 from django.db import DatabaseError
 from django.forms import EmailField
-from django.shortcuts import render
 from django.contrib.auth import authenticate, login
 from django.middleware import csrf
 from django.core.exceptions import ObjectDoesNotExist
@@ -22,11 +21,11 @@ from rest_framework_simplejwt import (
 from drf_yasg.utils import swagger_auto_schema
 from django.conf import settings
 from asgiref.sync import sync_to_async
-from app import models
+from users import models
 
 # from app.helpers.async_user_helpers import *
-from app.helpers.sync_user_helpers import *
-from app.serializers import user_serializers
+from users.helpers.sync_user_helpers import *
+from users.serializers import user_serializers
 
 # Create your views here.
 env = environ.Env()

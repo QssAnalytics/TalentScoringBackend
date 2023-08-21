@@ -1,7 +1,9 @@
 from django.urls import path, include
-from app.api import question_views, user_views, answer_views, stage_views, repot_views
+from app.api import question_views, answer_views, stage_views
 
 from django.contrib import admin
+
+from users.api import repot_views, user_views
 urlpatterns = [
     path('login/', user_views.loginView),
     path('register/', user_views.registerView),
