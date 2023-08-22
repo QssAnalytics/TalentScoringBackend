@@ -52,32 +52,34 @@ class SkillInfo(TypedDict):
 
 class ReportInfoAPIView(APIView):
     def get(self, request, *args, **kwargs):
-        rep = ReportModel.objects.select_related('user').filter(user__email='tami@mail.ru').values()
+        rep = ReportModel.objects.select_related('user').filter(user__email='tami@mail.ru').defer('report_file').values()
         data: TypedDict[str, SkillInfo] = {'education':{'text': 'Education', 'result':''}, 
                 'language': {'text': 'Language skills', 'result':''},
                 'special': {'text': 'Special talent', 'result':''},
                 'sport': {'text': 'Sport skills', 'result':''},
                 'work': {'text': 'Work experience', 'result':''},
                 'program': {'text': 'Program skills', 'result':''}}
-        rep_keys = rep[0].keys()
-        data_keys = data.keys()
-        
-        for r in rep_keys:
-            for d in data_keys:
-                if d in r:
-                    if isinstance(rep[0][r], Decimal):
-                        data[d][r] = float(rep[0][r])
-                        if 1<=float(rep[0][r])<=20:
-                            data[d]['result']='limited'
-                        elif 21<=float(rep[0][r])<=40:
-                            data[d]['result']='decent'
-                        elif 41<=float(rep[0][r])<=60:
-                            data[d]['result']='moderate'
-                        elif 61<=float(rep[0][r])<=80:
-                            data[d]['result']='solid'
-                        elif 81<=float(rep[0][r])<=100:
-                            data[d]['result']='extensive'
+        rep_data = rep[0]
+
+        for key, value in rep_data.items():
+            for d_key, d_value in data.items():
+                if d_key in key:
+                    if isinstance(value, Decimal):
+                        float_value = float(value)
+                        result = ''
+                        if 1 <= float_value <= 20:
+                            result = 'limited'
+                        elif 21 <= float_value <= 40:
+                            result = 'decent'
+                        elif 41 <= float_value <= 60:
+                            result = 'moderate'
+                        elif 61 <= float_value <= 80:
+                            result = 'solid'
+                        elif 81 <= float_value <= 100:
+                            result = 'extensive'
+                        d_value[key] = float_value
+                        d_value['result'] = result
                     else:
-                        data[d][r] = rep[0][r]
+                        d_value[key] = value
         
-        return Response({"data":data}, status=status.HTTP_201_CREATED)
+        return Response({"data":data}, status=status.HTTP_200_OK)

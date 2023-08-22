@@ -107,3 +107,4 @@ class ReportModel(models.Model):
     def delete(self,*args,**kwargs):
         self.report_file.delete(save=False)
         super().delete(*args, **kwargs)
+
