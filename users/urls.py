@@ -16,6 +16,8 @@ urlpatterns = [
     path('get-job-title-prompt/', user_views.JobTitleAPIView.as_view()),
     path('user-info-post/', user_views.UserInfoPost.as_view()),
     path('upload-report/', repot_views.ReportUploadAPIView.as_view()),
-    path('get-report/', repot_views.ReportInfoAPIView.as_view())
+    path('get-report/', repot_views.ReportInfoAPIView.as_view()),
+    path('get-input/', user_views.InputAPIView.as_view()), ####
+    path('get-certificate-intro/', user_views.CertificateIntroAPIView.as_view()) ####
 
 ]
