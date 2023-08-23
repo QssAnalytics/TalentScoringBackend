@@ -40,6 +40,6 @@ def run():
 
     print(f"len: {len(sorted_ixtisaslar)}, duplicates: {find_duplicates(sorted_ixtisaslar)}")
 
-    # for ixtisas in sorted_ixtisaslar:
-    #     if not Answer.objects.filter(questionIdd=q, answer_title=ixtisas).exists():
-    #         Answer.objects.create(answer_title=ixtisas, questionIdd=q)
+    for ixtisas in sorted_ixtisaslar:
+        if not Answer.objects.filter(questionIdd=q, answer_title=ixtisas).exists():
+            Answer.objects.create(answer_title=ixtisas, questionIdd=q)
