@@ -6,4 +6,4 @@ from users.models import ReportModel
 class ReportUploadSerializer(serializers.ModelSerializer):
     class Meta:
         model = ReportModel
-        fields = "__all__"
+        fields = ("user",'report_file')

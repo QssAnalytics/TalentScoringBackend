@@ -7,6 +7,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from django.core.files.base import ContentFile
 from users.models import ReportModel, UserAccount
+from users.models import ReportModel, UserAccount
 from users.serializers.report_serializers import ReportUploadSerializer
 
 class ReportUploadAPIView(APIView):
@@ -21,12 +22,11 @@ class ReportUploadAPIView(APIView):
         # print(req_data)
         try:
           email = request.data.get('email')
-          user = UserAccount.objects.get(email=email)
-          print('user',user)
+          user = UserAccount.objects.get(user__email=email)
         except ReportModel.DoesNotExist:
             return Response({'error': 'User not found with the provided email.'}, status=status.HTTP_404_NOT_FOUND)
-        print(email,cont_data)
-        # data = {'user': user.id, 'report_file': request.data.get('report_file')}
+        # print(email,cont_data)
+
         data = {'user': user.id, 'report_file': cont_data, 
                 'education_score': 0.0,
                 'language_score': 0.0,

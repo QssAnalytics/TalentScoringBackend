@@ -1,9 +1,10 @@
-import math, pandas as pd, openai, environ, json
+import math, base64, pandas as pd, openai, environ, json
 from django.db import DatabaseError
 from django.forms import EmailField
 from django.contrib.auth import authenticate, login
 from django.middleware import csrf
 from django.core.exceptions import ObjectDoesNotExist
+from django.core.files.base import ContentFile
 from rest_framework.views import APIView
 from rest_framework import (
     exceptions as rest_exceptions,
@@ -731,3 +732,31 @@ class CertificateIntroAPIView(APIView):
 
         certificate_intro_content = generate_certificate_intro_content()
         return response.Response({"certificate-intro-content":certificate_intro_content}, status=rest_status.HTTP_200_OK)
+    
+class UploadCertificateAPIView(APIView):
+    def post(self, request):
+        req_data = request.data.get('cert-file')
+        format, imgstr = req_data.split(';base64,')
+        ext = format.split('/')[-1] 
+        data = ContentFile(base64.b64decode(imgstr), name='temp.' + ext)
+
+        try:
+          email = request.data.get('email')
+          user = models.UserAccount.objects.get(email=email)
+
+        except models.UserAccount.DoesNotExist:
+            return response.Response({'error': 'User not found with the provided email.'}, status=rest_status.HTTP_404_NOT_FOUND)
+        
+        existing_certificate = models.CertificateModel.objects.filter(user=user)
+        if existing_certificate.exists():
+            return response.Response({'error': 'A certificate already exists for this user.'}, status=rest_status.HTTP_400_BAD_REQUEST)
+
+        data = {'user': user.id, 'cert_file': data, 'cert_image': data}  # Create the data dictionary
+        serializer = user_serializers.CertificateFileSerializer(data=data)  # Pass the data dictionary
+        
+        if serializer.is_valid():
+            serializer.save()
+
+            return response.Response({'message': f"sertificate of user with email: {user.email} uploaded."}, status=rest_status.HTTP_201_CREATED)
+        else:
+            return response.Response(serializer.errors, status=rest_status.HTTP_400_BAD_REQUEST)
