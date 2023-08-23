@@ -751,7 +751,7 @@ class UploadCertificateAPIView(APIView):
         if existing_certificate.exists():
             return response.Response({'error': 'A certificate already exists for this user.'}, status=rest_status.HTTP_400_BAD_REQUEST)
 
-        data = {'user': user.id, 'cert_file': data, 'cert_image': data}  # Create the data dictionary
+        data = {'user': user.id, 'cert_file': data}  # Create the data dictionary
         serializer = user_serializers.CertificateFileSerializer(data=data)  # Pass the data dictionary
         
         if serializer.is_valid():
