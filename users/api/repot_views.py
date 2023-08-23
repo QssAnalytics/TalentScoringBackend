@@ -81,5 +81,5 @@ class ReportInfoAPIView(APIView):
                         d_value['result'] = result
                     else:
                         d_value[key] = value
-        
+            
         return Response({"data":data}, status=status.HTTP_200_OK)

@@ -30,7 +30,6 @@ class UserManager(BaseUserManager):
         return self.create_user(email, password, **extra_fields)
 
 class UserAccount(AbstractBaseUser):
-    # username = models.CharField(max_length = 150, unique=True)
     first_name = models.CharField(max_length = 150, null=True, blank = True)
     last_name = models.CharField(max_length = 150, null=True, blank = True)
     email = models.EmailField(unique=True, blank=True, null=True)
@@ -38,7 +37,6 @@ class UserAccount(AbstractBaseUser):
     gender = models.CharField(max_length=10, choices = GENDER_CHOICES, blank=True, null=True)
     native_language = models.CharField(max_length=50, blank=True, null=True)
     country = models.CharField(max_length=50, blank=True, null=True)
-    # age = models.IntegerField(blank=True, null=True)
     is_active=models.BooleanField(default=True)
     is_superuser=models.BooleanField(default=False)
     is_staff=models.BooleanField(default=False)
@@ -61,20 +59,6 @@ class UserAccount(AbstractBaseUser):
     def __str__(self):
         
         return self.email
-
-
-# class UserProfile(models.Model):
-#     user = models.ForeignKey(
-#         'users.UserAccount', models.CASCADE
-#     )
-#     report_file = models.FileField(upload_to='images/') 
-
-#     def __str__(self) -> str:
-#         return self.user.email 
-    
-#     def delete(self,*args,**kwargs):
-#         self.report_file.delete(save=False)
-#         super().delete(*args, **kwargs)
 
 
 class ReportModel(models.Model):
@@ -108,3 +92,6 @@ class ReportModel(models.Model):
         self.report_file.delete(save=False)
         super().delete(*args, **kwargs)
 
+
+class UserCV(models.Model):
+    pass
