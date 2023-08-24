@@ -3,7 +3,7 @@ from users.models import UserAccount, CertificateModel
 class CertificateFileSerializer(serializers.ModelSerializer):
     class Meta:
         model = CertificateModel
-        fields = ['user', 'cert_file', 'cert_unique_key']
+        fields = ['user', 'cert_file', 'cert_unique_key', 'date_created']
     
     # def validate_cert_file(self, value):
     #     # Check if the uploaded file is a PDF
