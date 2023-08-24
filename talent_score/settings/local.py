@@ -18,6 +18,8 @@ CORS_ALLOWED_ORIGINS = [
     'https://talent-scoring-frontend-fikaroo.vercel.app',
     'https://talent-scoring-frontend-git-main-fikaroo.vercel.app',
     'https://talentscoring.vercel.app',
+    'https://talent-score-front-end-deploy-noi3.vercel.app',
+    'https://talentscore-report.netlify.app',
 ]
 
 CORS_ALLOW_CREDENTIALS = True
@@ -32,6 +34,8 @@ CSRF_TRUSTED_ORIGINS = [
     'https://talent-scoring-frontend-fikaroo.vercel.app/',
     'https://talent-scoring-frontend-git-main-fikaroo.vercel.app/',
     'https://talentscoring.vercel.app/',
+    'https://talent-score-front-end-deploy-noi3.vercel.app/',
+    'https://talentscore-report.netlify.app/'
     
 ]
 CORS_EXPOSE_HEADERS = ["Content-Type", "X-CSRFToken"]

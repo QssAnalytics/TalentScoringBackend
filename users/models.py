@@ -1,3 +1,5 @@
+import uuid
+
 from django.db import models
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import BaseUserManager
@@ -95,3 +97,25 @@ class ReportModel(models.Model):
 
 class UserCV(models.Model):
     pass
+class CertificateModel(models.Model):
+    user = models.ForeignKey(
+        'users.UserAccount', models.CASCADE
+    )
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    date_created = models.DateTimeField(auto_now_add=True)
+    
+    cert_file = models.FileField(upload_to='certificate/', blank=True, null=True)
+    cert_unique_key = models.CharField(max_length=32, unique=True, blank=True, null=True)
+
+    class Meta:
+        verbose_name = 'Certificate Model'
+        verbose_name_plural = 'Certificate Model'
+    
+    def __str__(self) -> str:
+        return self.user.email
+
+
+class UniqueRandom(models.Model):
+    unique_value = models.CharField(max_length=32, unique=True)
+    def __str__(self) -> str:
+        return self.unique_value

@@ -49,3 +49,4 @@ class UserInfoSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserAccount
         fields = ('email','user_info')
+    

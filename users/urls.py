@@ -3,7 +3,7 @@ from django.urls import path, include
 
 from django.contrib import admin
 
-from users.api import repot_views, user_views
+from users.api import repot_views, user_views, certificate_views
 urlpatterns = [
     path('login/', user_views.loginView),
     path('register/', user_views.registerView),
@@ -17,7 +17,9 @@ urlpatterns = [
     path('user-info-post/', user_views.UserInfoPost.as_view()),
     path('upload-report/', repot_views.ReportUploadAPIView.as_view()),
     path('get-report/', repot_views.ReportInfoAPIView.as_view()),
-    path('get-input/', user_views.InputAPIView.as_view()), ####
-    path('get-certificate-intro/', user_views.CertificateIntroAPIView.as_view()) ####
-
+    path('get-input/', certificate_views.InputAPIView.as_view()), ####
+    path('get-certificate-intro/', certificate_views.CertificateIntroAPIView.as_view()), ####
+    
+    path('upload-cert/', certificate_views.UploadCertificateAPIView.as_view(), name='upload-certificate'),
+    path('get-unique-cert-id/', certificate_views.CreateUniqueCertificateValue.as_view())
 ]
