@@ -26,6 +26,7 @@ class GetQuestionApiView(APIView):
         questions = Question.objects.filter(query).values("id", "question_title", "question_type")
         question_list = [question for question in questions]
         return JsonResponse({"questions": question_list})
+   
     
 class AddQuestionApiView(APIView):
     def post(self, request):        
