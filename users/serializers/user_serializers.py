@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from django.conf import settings
 from django.contrib.auth import get_user_model
-from users.models import UserAccount, CertificateModel
+from users.models import UserAccount
 
 UserAccount=get_user_model()
 
@@ -50,14 +50,3 @@ class UserInfoSerializer(serializers.ModelSerializer):
         model = UserAccount
         fields = ('email','user_info')
     
-class CertificateFileSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = CertificateModel
-        fields = ['user', 'cert_file', 'cert_image']
-    
-    # def validate_cert_file(self, value):
-    #     # Check if the uploaded file is a PDF
-    #     if not value.name.lower().endswith('.pdf'):
-    #         raise serializers.ValidationError("Only PDF files are allowed.")
-
-    #     return value

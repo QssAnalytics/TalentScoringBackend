@@ -21,5 +21,5 @@ urlpatterns = [
     path('get-certificate-intro/', certificate_views.CertificateIntroAPIView.as_view()), ####
     
     path('upload-cert/', certificate_views.UploadCertificateAPIView.as_view(), name='upload-certificate'),
-
+    path('get-unique-cert-id/', certificate_views.CreateUniqueCertificateValue.as_view())
 ]

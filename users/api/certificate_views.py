@@ -7,9 +7,10 @@ from rest_framework import response, status as rest_status
 
 from users import models
 
-# from app.helpers.async_user_helpers import *
+
 from users.helpers.sync_user_helpers import *
 from users.serializers import user_serializers
+from users.utils.random_unique_key_utils import generate_unique_random_key
 
 env = environ.Env()
 environ.Env.read_env()
@@ -149,7 +150,7 @@ class UploadCertificateAPIView(APIView):
         format, imgstr = req_data.split(';base64,')
         ext = format.split('/')[-1] 
         data = ContentFile(base64.b64decode(imgstr), name='temp.' + ext)
-
+        certificate_unique_key = request.data.get('unique_key')
         try:
           email = request.data.get('email')
           user = models.UserAccount.objects.get(email=email)
@@ -161,7 +162,7 @@ class UploadCertificateAPIView(APIView):
         if existing_certificate.exists():
             return response.Response({'error': 'A certificate already exists for this user.'}, status=rest_status.HTTP_400_BAD_REQUEST)
 
-        data = {'user': user.id, 'cert_file': data}  # Create the data dictionary
+        data = {'user': user.id, 'cert_file': data, 'cert_unique_key': certificate_unique_key}  # Create the data dictionary
         serializer = user_serializers.CertificateFileSerializer(data=data)  # Pass the data dictionary
         
         if serializer.is_valid():
@@ -170,3 +171,22 @@ class UploadCertificateAPIView(APIView):
             return response.Response({'message': f"sertificate of user with email: {user.email} uploaded."}, status=rest_status.HTTP_201_CREATED)
         else:
             return response.Response(serializer.errors, status=rest_status.HTTP_400_BAD_REQUEST)
+
+
+
+
+class CreateUniqueCertificateValue(APIView):
+    def get(self, request):
+        code = generate_unique_random_key()
+        print(type(code))
+        d = models.UniqueRandom.objects.filter(unique_value=code).exists()
+        MAX_TRIES = 31
+        loop_count = 0
+        while d:
+            loop_count+=1
+            code = generate_unique_random_key()
+            d = models.UniqueRandom.objects.filter(unique_value=code).exists()
+            if loop_count > MAX_TRIES:
+                return response.Response("REQUEST_TIMEOUT", status=rest_status.HTTP_408_REQUEST_TIMEOUT)
+
+        return response.Response({'code': code, 'unique':d})

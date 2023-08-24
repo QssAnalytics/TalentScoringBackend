@@ -105,7 +105,7 @@ class CertificateModel(models.Model):
     date_created = models.DateTimeField(auto_now_add=True)
     
     cert_file = models.FileField(upload_to='certificate/', blank=True, null=True)
-    cert_image = models.FileField(upload_to='certificate/images', blank=True, null=True)
+    cert_unique_key = models.CharField(max_length=32, unique=True, blank=True, null=True)
 
     class Meta:
         verbose_name = 'Certificate Model'
@@ -113,3 +113,9 @@ class CertificateModel(models.Model):
     
     def __str__(self) -> str:
         return self.user.email
+
+
+class UniqueRandom(models.Model):
+    unique_value = models.CharField(max_length=32, unique=True)
+    def __str__(self) -> str:
+        return self.unique_value
