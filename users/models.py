@@ -113,24 +113,3 @@ class CertificateModel(models.Model):
     
     def __str__(self) -> str:
         return self.user.email
-    
-
-class CertificateModel(models.Model):
-    user = models.ForeignKey(
-        'users.UserAccount', models.CASCADE
-    )
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    date_created = models.DateTimeField(auto_now_add=True)
-    
-    cert_file = models.FileField(upload_to='certificate/', blank=True, null=True)
-    cert_image = models.FileField(upload_to='certificate/images', blank=True, null=True)
-
-    class Meta:
-        verbose_name = 'Certificate Model'
-        verbose_name_plural = 'Certificate Model'
-    
-    def __str__(self) -> str:
-        return self.user.email
-    
-class UserCV(models.Model):
-    pass

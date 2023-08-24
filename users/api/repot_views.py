@@ -22,7 +22,7 @@ class ReportUploadAPIView(APIView):
         # print(req_data)
         try:
           email = request.data.get('email')
-          user = UserAccount.objects.get(user__email=email)
+          user = UserAccount.objects.get(email=email)
         except ReportModel.DoesNotExist:
             return Response({'error': 'User not found with the provided email.'}, status=status.HTTP_404_NOT_FOUND)
         # print(email,cont_data)
