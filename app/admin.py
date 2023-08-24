@@ -10,7 +10,7 @@ from django.db import models
 
 class AnswerTabularInline(admin.TabularInline):
     model = model.Answer
-    fields = ('answer_title','answer_weight_for_hashing', 'answer_weight',  'answer_dependens_on', 'stage_fit')
+    fields = ('answer_title','answer_weight_for_hashing', 'answer_weight',  'answer_dependens_on', 'answer_weight_store')
     raw_id_fields = ('answer_dependens_on', 'stage_fit')
     fk_name = "questionIdd"
 
@@ -38,7 +38,7 @@ class StageAdmin(admin.ModelAdmin):
 class AnswerAdmin(admin.ModelAdmin):
     search_fields= ('answer_title','questionIdd__question_title')
     autocomplete_fields = ['answer_dependens_on']
-    list_display = ('answer_title', 'get_question_title', 'answer_weight')
+    list_display = ('answer_title', 'get_question_title', 'answer_weight', 'answer_weight_store')
 
     def get_queryset(self, request):
         queryset = super().get_queryset(request)

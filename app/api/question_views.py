@@ -18,7 +18,7 @@ class QuestionListApiView(APIView):
         return Response({"questions": serializer.data})
     
 class GetQuestionApiView(APIView):
-    def get(self, request):
+    def get(self, request, language, level):
         query = Q()
         for index in request.data['data']:
             query.add(Q(question_dependens_on_answer=index), Q.OR)
@@ -30,7 +30,7 @@ class GetQuestionApiView(APIView):
     
 class AddQuestionApiView(APIView):
     def post(self, request):        
-        cache.set("user_info", request.data, 24*3600)
+        cache.set("user_info", request.data, 24*3600) #TODO: add user email ass cache key
         if cache.get("user_info") is not None:
             return Response({
                 'data': cache.get("user_info", status=status.HTTP_200_OK),

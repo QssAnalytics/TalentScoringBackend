@@ -22,7 +22,7 @@ class Answer(models.Model):
                                              null=True,
                                                blank=True)
     stage_fit = models.OneToOneField('app.Stage', on_delete=models.PROTECT, null=True,blank=True)
-    
+    answer_weight_store = models.JSONField(blank=True, null=True)
     class Meta:
         verbose_name = 'Answer'
         verbose_name_plural = 'Answers'

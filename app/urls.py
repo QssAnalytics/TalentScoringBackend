@@ -1,5 +1,5 @@
 from django.urls import path, include
-from app.api import question_views, stage_views
+from app.api import question_views, stage_views, answer_views
 
 from django.contrib import admin
 
@@ -10,6 +10,7 @@ urlpatterns = [
     path('question-lists/<slug:slug>/<int:pk>/',stage_views.StageQuestionViewSet.as_view({'get':'retrieve'})),
     path('add-stage-question/', question_views.AddQuestionApiView.as_view()),
     ###
+    path('get-answer-weight/<str:language>/<str:level>/', answer_views.GetAnswerWeight.as_view()),
     
     path('stage-object/<slug:slug>/',stage_views.StageObjectApiView.as_view()),
     path('stage-parent-lists/', stage_views.StageParentListApiView.as_view(), name = 'parent-stage-api'),
