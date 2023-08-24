@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from django.conf import settings
 from django.contrib.auth import get_user_model
-from users.models import UserAccount
+from users.models import UserAccount, ReportModel
 
 UserAccount=get_user_model()
 
@@ -45,8 +45,13 @@ class UserAccountSerializer(serializers.ModelSerializer):
         model = UserAccount
         fields = ("email","gender")
 
-class UserInfoSerializer(serializers.ModelSerializer):
+
+class ReportSerializer(serializers.ModelSerializer):
     class Meta:
-        model = UserAccount
-        fields = ('email','user_info')
+        model = ReportModel
+        fields = "__all__"
+# class UserInfoSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = UserAccount
+#         fields = ('email','user_info')
     

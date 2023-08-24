@@ -151,6 +151,7 @@ class UploadCertificateAPIView(APIView):
         ext = format.split('/')[-1] 
         data = ContentFile(base64.b64decode(imgstr), name='temp.' + ext)
         certificate_unique_key = request.data.get('unique_key')
+        date_created = request.data.get('date_created')
         try:
           email = request.data.get('email')
           user = models.UserAccount.objects.get(email=email)
@@ -162,8 +163,8 @@ class UploadCertificateAPIView(APIView):
         if existing_certificate.exists():
             return response.Response({'error': 'A certificate already exists for this user.'}, status=rest_status.HTTP_400_BAD_REQUEST)
 
-        data = {'user': user.id, 'cert_file': data, 'cert_unique_key': certificate_unique_key}  # Create the data dictionary
-        serializer = user_serializers.CertificateFileSerializer(data=data)  # Pass the data dictionary
+        data = {'user': user.id, 'cert_file': data, 'cert_unique_key': certificate_unique_key, 'date_created':date_created}
+        serializer = user_serializers.CertificateFileSerializer(data=data) 
         
         if serializer.is_valid():
             serializer.save()

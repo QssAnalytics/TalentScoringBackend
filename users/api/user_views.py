@@ -159,7 +159,7 @@ def user(request):
 
 class UserInfoPost(APIView):
     @swagger_auto_schema(
-        request_body=user_serializers.UserInfoSerializer,
+        request_body=user_serializers.ReportSerializer, #TODO: create report serializer and use it
         operation_description="POST user_info email",
     )
     def post(self, request):
