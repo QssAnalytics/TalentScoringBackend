@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from django.conf import settings
 from django.contrib.auth import get_user_model
-from users.models import UserAccount, ReportModel
+from users.models import UserAccount, ReportModel, UserFile
 
 UserAccount=get_user_model()
 
@@ -55,3 +55,5 @@ class ReportSerializer(serializers.ModelSerializer):
 #         model = UserAccount
 #         fields = ('email','user_info')
     
+
+    #     return value
