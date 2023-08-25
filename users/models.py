@@ -121,7 +121,7 @@ class UniqueRandom(models.Model):
 
 class FileCategory(models.Model):
     name = models.CharField(max_length=50)
-    file_count = models.PositiveIntegerField(default=0)  # Field to store the file count
+    file_count = models.PositiveIntegerField(default=0, editable=False)  # Field to store the file count
     allows_multiple_files = models.BooleanField(default=False)
     
     def __str__(self):
