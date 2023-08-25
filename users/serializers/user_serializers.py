@@ -57,3 +57,26 @@ class ReportSerializer(serializers.ModelSerializer):
     
 
     #     return value
+
+class UserFileUploadSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserFile
+        fields = ('user', 'category', 'file')
+
+    def create(self, validated_data):
+        user = validated_data['user']
+        category = validated_data['category']
+        file = validated_data['file']
+
+        # Check if the category allows multiple files
+        if category.allows_multiple_files and category.file_count >= 1:
+            # Create a new UserFile instance for each uploaded file
+            instances = [UserFile(user=user, category=category, file=uploaded_file) for uploaded_file in file]
+            UserFile.objects.bulk_create(instances)
+        else:
+            # For categories that allow only one file, create or update the existing instance
+            instance, created = UserFile.objects.get_or_create(user=user, category=category)
+            instance.file = file[0]
+            instance.save()
+        
+        return instance
