@@ -17,4 +17,4 @@ Certificate file-ni upload edilmə mərhələsi
 2) Certificate fileni front upload edende contenti, filenin unique key database-də save edilməli.
 
 
-# Filləri saxlamaq üçün ümumi database strukturunu qurmaq
+# Filləri saxlamaq üçün ümumi database strukturunu qurmaq(done)
