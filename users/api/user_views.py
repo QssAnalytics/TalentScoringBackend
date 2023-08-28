@@ -1,17 +1,20 @@
 import math, base64, pandas as pd, openai, environ, json
 from django.db import DatabaseError
+from django.core.files.base import ContentFile
 from django.core.exceptions import ObjectDoesNotExist
 from django.forms import EmailField
 from django.contrib.auth import authenticate, login
 from django.middleware import csrf
 from rest_framework.views import APIView
+from rest_framework.parsers import FileUploadParser, MultiPartParser
 from rest_framework import (
     exceptions as rest_exceptions,
-    response,
+    
     decorators as rest_decorators,
     permissions as rest_permissions,
     status as rest_status,
 )
+from rest_framework.response import Response
 from rest_framework_simplejwt import (
     tokens,
     views as jwt_views,
@@ -48,7 +51,7 @@ def loginView(request):
     user = authenticate(email=email, password=password)
     if user is not None:
         tokens = get_user_tokens(user)
-        res = response.Response()
+        res = Response()
         res.set_cookie(
             key=settings.SIMPLE_JWT["AUTH_COOKIE"],
             value=tokens["access_token"],
@@ -88,7 +91,7 @@ def registerView(request):
     user = serializer.save()
 
     if user is not None:
-        return response.Response("Registered!")
+        return Response("Registered!")
     # return response.Response("Registered!")
     return rest_exceptions.AuthenticationFailed("Invalid credentials!")
 
@@ -101,7 +104,7 @@ def logoutView(request):
         token = tokens.RefreshToken(refreshToken)
         token.blacklist()
 
-        res = response.Response()
+        res = Response()
         res.delete_cookie(settings.SIMPLE_JWT["AUTH_COOKIE"])
         res.delete_cookie(settings.SIMPLE_JWT["AUTH_COOKIE_REFRESH"])
         res.delete_cookie("X-CSRFToken")
@@ -152,10 +155,10 @@ def user(request):
     try:
         user = models.UserAccount.objects.get(id=request.user.id)
     except models.UserAccount.DoesNotExist:
-        return response.Response(status_code=404)
+        return Response(status_code=404)
 
     serializer = user_serializers.UserAccountSerializer(user)
-    return response.Response(serializer.data)
+    return Response(serializer.data)
 
 
 class UserInfoPost(APIView):
@@ -171,15 +174,15 @@ class UserInfoPost(APIView):
         try:
             user = UserAccount.objects.get(email=email)
         except UserAccount.DoesNotExist:
-            return response.Response(status=rest_status.HTTP_404_NOT_FOUND)
+            return Response(status=rest_status.HTTP_404_NOT_FOUND)
         except DatabaseError as db_error:
-            return response.Response(status=rest_status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return Response(status=rest_status.HTTP_500_INTERNAL_SERVER_ERROR)
 
         # formatted_user_info = json.dumps(user_info)
         user.user_info = user_info
         user.save()
 
-        return response.Response(status=rest_status.HTTP_200_OK)
+        return Response(status=rest_status.HTTP_200_OK)
 
 
 class UserScoreAPIView(APIView):
@@ -212,7 +215,7 @@ class UserScoreAPIView(APIView):
             if stage["name"] == "idman-substage":
                 sports_score = get_sport_skills_score(stage)
         
-        return response.Response(
+        return Response(
             {
                 "user_info": user.user_info,
                 "special_skills_weight": skills_score,
@@ -367,7 +370,7 @@ class SummryPromptAPIView(APIView):
         sample_summary = generate_cv_summary()
         sample_summary.replace("\n\n", "\n")
 
-        return response.Response({"sample_summary": sample_summary})
+        return Response({"sample_summary": sample_summary})
 
 
 class ExperiancePromptAPIView(APIView):
@@ -503,7 +506,7 @@ class ExperiancePromptAPIView(APIView):
                 job_experience = list(
                     map(lambda x: x[1:] if x[0] == "-" else x, job_experience)
                 )
-                return response.Response({"job_experience": job_experience})
+                return Response({"job_experience": job_experience})
 
             for i in list(w_e.keys()):
                 job_exp_no = i.split("_")[-1]
@@ -516,10 +519,10 @@ class ExperiancePromptAPIView(APIView):
                     map(lambda x: x[1:] if x[0] == "-" else x, job_experience)
                 )
                 w_e_list.append({f"job_experience{job_exp_no}": job_experience})
-            return response.Response({"job_experience": w_e_list})
+            return Response({"job_experience": w_e_list})
 
         job_experience = generate_summary_job_experience()
-        return response.Response({"job_experience": job_experience})
+        return Response({"job_experience": job_experience})
 
 
 class JobTitleAPIView(APIView):
@@ -600,37 +603,31 @@ class JobTitleAPIView(APIView):
         #     return resp.choices[0].message.content
         # job_title = generate_job_title()
         # return response.Response({"job_title":job_title})
-        return response.Response({})
+        return Response({})
 
 class UserFilesAPIView(APIView):
+    # parser_classes = (MultiPartParser,)
     
-    def post(self, request, format=None):
-        email = 'tami@mail.ru' 
-        #TODO: email = request.user.email
-        '''
-            email = None
-            if request.user.is_authenticated():
-                username = request.user.email
-        '''
-
-        try:
-            user = models.UserAccount.objects.get(email=email)
-        except ObjectDoesNotExist:
-            return response.Response({'error':f'User with email {email} does not exist.'})
-        
-        category_name = request.data.category
-        try:
-            category = models.FileCategory.objects.get(name=category_name)
-        except ObjectDoesNotExist:
-            models.FileCategory.objects.create(name=category_name)
-            # return response.Response({'error':f'There is no category named {category_name} for user uploaded files.'})
-        
-        data = {'user':user, 'category':category, 'file':request.data}
-        serializer = user_serializers.UserFileUploadSerializer(data=data)
+    def post(self, request, *args, **kwargs):
+        serializer = user_serializers.UserVerificationFileUploadSerializer(data=request.data, many=True)
         
         if serializer.is_valid():
-            serializer.save()
-            category['file_count'] += 1
-            return response.Response(serializer.data, status=rest_status.HTTP_201_CREATED)
-        
-        return response.Response(serializer.errors, status=rest_status.HTTP_400_BAD_REQUEST)
+            uploaded_data = serializer.validated_data
+            print(uploaded_data)
+        #     try:
+        #         user = UserAccount.objects.get(email='tami@mail.ru')  # Retrieve the user
+        #     except UserAccount.DoesNotExist:
+        #         return Response({'message': 'User not found'})
+
+        #     for data in uploaded_data:
+        #         category = data['category']
+        #         uploaded_files = data['files']
+
+        #         for uploaded_file in uploaded_files:
+        #             models.UserVerificationFile.objects.create(user=user, category=category, file=uploaded_file)
+
+        #     return Response({'message': 'Files uploaded successfully'})
+        # else:
+        #     return Response(serializer.errors)
+        return Response({'message': 'Files uploaded successfully'})
+

@@ -62,11 +62,28 @@ class UserAccount(AbstractBaseUser):
         
         return self.email
 
+def user_account_file_upload_path(instance, filename):
+    return f'{instance.file_category}/{filename}'
 
-class ReportModel(models.Model):
+class UserAccountFilePage(models.Model):
+    class FileCategoryChoices(models.TextChoices):
+        CV = "CV", "V"
+        REPORT = "REPORT", "REPORT"
+        CERTIFICATE = "CERTIFICATE", "CERTIFICATE"
+
     user = models.ForeignKey(
         'users.UserAccount', models.CASCADE
     )
+    file_category = models.CharField(max_length=20, choices=FileCategoryChoices.choices)
+    file_key = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
+    report_file = models.FileField(upload_to=user_account_file_upload_path, blank=True, null=True)
+
+
+class ReportModel(models.Model):
+    # user = models.ForeignKey(
+    #     'users.UserAccount', models.CASCADE
+    # )
+    file = models.ForeignKey(UserAccountFilePage, models.CASCADE)
     user_info = models.JSONField(blank=True, null=True)
     education_score = models.DecimalField(max_digits=16, decimal_places=13)
     education_color = models.CharField(max_length=30, default='#00E5BC')
@@ -119,41 +136,52 @@ class UniqueRandom(models.Model):
     def __str__(self) -> str:
         return self.unique_value
 
-class FileCategory(models.Model):
-    name = models.CharField(max_length=50)
-    file_count = models.PositiveIntegerField(default=0, editable=False)  # Field to store the file count
-    allows_multiple_files = models.BooleanField(default=False)
+# class FileCategory(models.Model):
+#     name = models.CharField(max_length=50)
+#     file_count = models.PositiveIntegerField(default=0, editable=False)  # Field to store the file count
+#     allows_multiple_files = models.BooleanField(default=False)
     
-    def __str__(self):
-        return self.name
+#     def __str__(self):
+#         return self.name
 
 def user_file_upload_path(instance, filename):
-    return f'user-files/{instance.user.email}/{instance.category.name}/{filename}'
+    return f'user-files/{instance.user.email}/{instance.category}/{filename}'
 
-class UserFile(models.Model):
+
+
+
+class UserVerificationFile(models.Model):
     user = models.ForeignKey(UserAccount, on_delete=models.CASCADE)
-    category = models.ForeignKey(FileCategory, on_delete=models.CASCADE)
+    category = models.CharField(max_length=150)
     file = models.FileField(upload_to=user_file_upload_path, null=True, blank=True)
+
+
+
+
+# class UserFile(models.Model):
+#     user = models.ForeignKey(UserAccount, on_delete=models.CASCADE)
+#     category = models.ForeignKey(FileCategory, on_delete=models.CASCADE)
+#     file = models.FileField(upload_to=user_file_upload_path, null=True, blank=True)
     
-    class Meta:
-        verbose_name = 'User File'
-        verbose_name_plural = 'User Files'
+#     class Meta:
+#         verbose_name = 'User File'
+#         verbose_name_plural = 'User Files'
     
-    def __str__(self):
-        return f"{self.user.email} - {self.category}"
+#     def __str__(self):
+#         return f"{self.user.email} - {self.category}"
     
-    def save(self, *args, **kwargs):
-        # Increment the file count for the category when a new UserFile is created
-        if not self.pk: 
-            self.category.file_count += 1
-            self.category.save()
-        super().save(*args, **kwargs)
+#     def save(self, *args, **kwargs):
+#         # Increment the file count for the category when a new UserFile is created
+#         if not self.pk: 
+#             self.category.file_count += 1
+#             self.category.save()
+#         super().save(*args, **kwargs)
     
-    def delete(self, *args, **kwargs):
-        # Decrement the file count for the category when a UserFile is deleted
-        self.category.file_count -= 1
-        self.category.save()
-        super().delete(*args, **kwargs)
+#     def delete(self, *args, **kwargs):
+#         # Decrement the file count for the category when a UserFile is deleted
+#         self.category.file_count -= 1
+#         self.category.save()
+#         super().delete(*args, **kwargs)
 
 # class UserFiles(models.Model):
 #     user = models.ForeignKey('users.UserAccount', models.CASCADE)

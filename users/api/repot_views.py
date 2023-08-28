@@ -11,7 +11,7 @@ from users.models import ReportModel, UserAccount
 from users.serializers.report_serializers import ReportUploadSerializer
 
 class ReportUploadAPIView(APIView):
-    # parser_classes = (MultiPartParser,)
+    parser_classes = (MultiPartParser,)
 
     def post(self, request, *args, **kwargs):
         # print(request.data.get('report_file'))
