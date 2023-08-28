@@ -618,19 +618,20 @@ class UserFilesAPIView(APIView):
         except ObjectDoesNotExist:
             return response.Response({'error':f'User with email {email} does not exist.'})
         
-        category_name = request.data.category
+        category_name = request.data['category']
         try:
             category = models.FileCategory.objects.get(name=category_name)
         except ObjectDoesNotExist:
             models.FileCategory.objects.create(name=category_name)
+            category = models.FileCategory.objects.get(name=category_name)
             # return response.Response({'error':f'There is no category named {category_name} for user uploaded files.'})
         
-        data = {'user':user, 'category':category, 'file':request.data}
+        data = {'user':user.id, 'category':category.id, 'file':request.data["file"]}
         serializer = user_serializers.UserFileUploadSerializer(data=data)
         
         if serializer.is_valid():
-            serializer.save()
-            category['file_count'] += 1
+            # serializer.save()
+            category.file_count += 1
             return response.Response(serializer.data, status=rest_status.HTTP_201_CREATED)
         
         return response.Response(serializer.errors, status=rest_status.HTTP_400_BAD_REQUEST)
