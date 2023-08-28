@@ -1,4 +1,6 @@
 import base64, pandas as pd, openai, environ
+import os
+from pathlib import Path
 
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.files.base import ContentFile
@@ -16,7 +18,9 @@ environ.Env.read_env()
 
 class CertificateDesigAPIView(APIView):
     def get(self, request):
-        df = pd.read_excel("sample_df.xlsx")
+        BASE_DIR = Path(__file__).resolve().parent.parent.parent
+        dir = os.path.join(BASE_DIR, 'sample_df.xlsx')
+        df = pd.read_excel(dir)
 
         openai.api_key = env("api_key")
 
@@ -128,7 +132,9 @@ class CertificateDesigAPIView(APIView):
     
 class CertificateIntroAPIView(APIView):
     def get(self, request):
-        df = pd.read_excel("sample_df.xlsx")
+        BASE_DIR = Path(__file__).resolve().parent.parent.parent
+        dir = os.path.join(BASE_DIR, 'sample_df.xlsx')
+        df = pd.read_excel(dir)
 
         openai.api_key = env("api_key")
         
