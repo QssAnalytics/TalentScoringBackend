@@ -23,39 +23,8 @@ class CertificateDesigAPIView(APIView):
         dir = os.path.join(BASE_DIR, 'sample_df.xlsx')
         df = pd.read_excel(dir)
 
-        openai.api_key = env("api_key")
-
-        # def generate_input_prompt(i = 17, dataframe = df):
-
-        #     ######################
-        #     ##  Create Prompt   ##
-        #     ######################
-
-        #     prompt = ''
-        #     prompt += f'Hello, my name is {df.iloc[i].name_surname}. I am {df.iloc[i].age} years old. I am {df.iloc[i].gender}. '
-        #     prompt += f"I have education level of {df.iloc[i].level}. "
-        #     to_be_form =   'were' if df.iloc[i].level != 'High School' else 'are'
-        #     prompt += f"My high school grades {to_be_form} excellent. " if df['performance'].iloc[i] == 'excellent student' else f"My high school grades {to_be_form} competent. " if df['performance'].iloc[i] == 'average student' else f"My high school grades {to_be_form} average. "
-        #     prompt += "" if df.iloc[i].level == 'High School' else f"Here is detailed information about my education: {df.iloc[i].educations}. "
-        #     prompt += "" if df.iloc[i].Olympics_win == 'no' else f" I have participated in {df.iloc[i]['Olympiad subject']} subject which was in {df.iloc[i].Best_stage} level and got {df.iloc[i].Result_of_olimpic}. "
-        #     prompt += "I have had no work experience. " if df.iloc[i].work_experience == 'No' else f"Here is detailed information about my work experience: {df.iloc[i].work_experience}. "
-        #     prompt += f"I have no other language knowledge and my native language is {df.iloc[i].native_lang}" if df.loc[i, 'language level'] == "No language knowledge" else f"""My native
-        #                             language is {df.iloc[i].native_lang} and here is detailed information about my language knowledge: {df.loc[i, 'language level']}. """
-
-        #     prompt += "" if df.iloc[i].sport_details == {} or df.iloc[i].sport_details == '{}' else f"Here is detailed information about my sport background {df.iloc[i].sport_details}. "
-
-        #     prompt += "" if df.iloc[i].special_skills == {} or df.iloc[i].special_skills == '{}' else f"Here is detailed information about my background on other skills: {df.iloc[i].special_skills}. "
-
-
-        #     prompt += "" if df.iloc[i].programming_knowledge == {} or df.iloc[i].programming_knowledge == '{}' else f"Here is detailed information about my background on programming skills: {df['programming_knowledge'].iloc[i]}. "
-        #     prompt = prompt.replace("'", "").replace('"', "").replace("{", "").replace("}", "").replace("_", " ").replace('\n', " ").replace('                         ', " ")
-
-        #     # print(prompt)
-        #     return prompt
-        
-        # input_promt = generate_input_prompt()
         def generate_certificate_designation_content(i = 17, dataframe = df, temperature = 0.7):
-            
+            openai.api_key = env("api_key")
             ######################
             ##  Create Prompt   ##
             ######################
@@ -117,7 +86,7 @@ class CertificateDesigAPIView(APIView):
                                                     User data is this: {prompt}. You may also need to know that {testing_system_info}.
                                                     The response you give will be written into pdf file, so that do not indicate any redundant and irrelevant things in your response.
                                                     """},
-                    {"role": "user", "content": """Please write certificate designation section (max 3 words) based on the information of the user. \
+                    {"role": "user", "content": """Please write certificate designation section (no more than 26 characters including spaces) based on the information of the user. \
                                                 """},
 
                 ],
@@ -126,6 +95,7 @@ class CertificateDesigAPIView(APIView):
 
 
             print(response.choices[0].message.content)
+
             return response.choices[0].message.content
         certificate_designation_content = generate_certificate_designation_content()
         return response.Response({"certificate_designation_content": certificate_designation_content}, status=rest_status.HTTP_200_OK)
@@ -137,9 +107,8 @@ class CertificateIntroAPIView(APIView):
         dir = os.path.join(BASE_DIR, 'sample_df.xlsx')
         df = pd.read_excel(dir)
 
-        openai.api_key = env("api_key")
-        
         def generate_certificate_intro_content(i = 17, dataframe = df, temperature = 0.7):
+            openai.api_key = env("api_key")
             ######################
             ##  Create Prompt   ##
             ######################
@@ -208,9 +177,9 @@ class CertificateIntroAPIView(APIView):
                                                     The response you give will be written into pdf file, so that do not indicate any redundant and irrelevant things
                                                     in your response. You also know that you should emphasize strong sides of the candidate, potential relevant job positions.
                                                     """},
-                    {"role": "user", "content": f"""Please write certificate summary section (max 30-40 words) based on the information of the user.
+                    {"role": "user", "content": f"""Please write certificate summary section (minimum 450, maximum 480 characters) based on the information of the user.
                     User's peer percentile score is {score_1} and overall percentile score is {score_2}
-                                            """},
+                                               """},
 
                 ],
                 temperature = temperature,
@@ -224,6 +193,7 @@ class CertificateIntroAPIView(APIView):
         certificate_intro_content = generate_certificate_intro_content()
         return response.Response({"certificate-intro-content":certificate_intro_content}, status=rest_status.HTTP_200_OK)
     
+
 class UploadCertificateAPIView(APIView):
     def post(self, request):
         req_data = request.data.get('cert-file')
