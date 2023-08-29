@@ -4,13 +4,14 @@ from pathlib import Path
 
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.files.base import ContentFile
+from django.db import transaction
 from rest_framework.views import APIView
 from rest_framework import response, status as rest_status
 
 from users import models
 
 from users.helpers.sync_user_helpers import *
-from users.serializers import user_serializers
+from users.serializers import user_serializers, user_account_file_serializers, certificate_serializers
 from users.utils.random_unique_key_utils import generate_unique_random_key
 
 env = environ.Env()
@@ -228,9 +229,7 @@ class UploadCertificateAPIView(APIView):
         req_data = request.data.get('cert-file')
         format, imgstr = req_data.split(';base64,')
         ext = format.split('/')[-1] 
-        data = ContentFile(base64.b64decode(imgstr), name='temp.' + ext)
-        certificate_unique_key = request.data.get('unique_key')
-        date_created = request.data.get('date_created')
+        data_file = ContentFile(base64.b64decode(imgstr), name='cert.' + ext)
         try:
           email = request.data.get('email')
           user = models.UserAccount.objects.get(email=email)
@@ -238,19 +237,24 @@ class UploadCertificateAPIView(APIView):
         except models.UserAccount.DoesNotExist:
             return response.Response({'error': 'User not found with the provided email.'}, status=rest_status.HTTP_404_NOT_FOUND)
         
-        existing_certificate = models.CertificateModel.objects.filter(user=user)
-        if existing_certificate.exists():
-            return response.Response({'error': 'A certificate already exists for this user.'}, status=rest_status.HTTP_400_BAD_REQUEST)
+        with transaction.atomic():
+            file_data = {'user': user.id, 'file': data_file, "file_category": "CERTIFICATE"}
+            user_accout_serializer = user_account_file_serializers.UserAccountFilePageSerializer(data=file_data)
+            if user_accout_serializer.is_valid():
+                user_accout_file = user_accout_serializer.save()
+            else:
+                return response.Response(user_accout_serializer.errors, status=rest_status.HTTP_400_BAD_REQUEST)
 
-        data = {'user': user.id, 'cert_file': data, 'cert_unique_key': certificate_unique_key, 'date_created':date_created}
-        serializer = user_serializers.CertificateFileSerializer(data=data) 
-        
-        if serializer.is_valid():
-            serializer.save()
-
-            return response.Response({'message': f"sertificate of user with email: {user.email} uploaded."}, status=rest_status.HTTP_201_CREATED)
-        else:
-            return response.Response(serializer.errors, status=rest_status.HTTP_400_BAD_REQUEST)
+            certificate_data = {
+                "file_key":request.data.get("file_key"),
+                "certificate_file": user_accout_file.id,
+                "date_created": request.data.get("date_created")
+            }
+            cert_serializer = certificate_serializers.CertificateFileSerializer(data=certificate_data)
+            if cert_serializer.is_valid():
+                cert_serializer.save()
+                return response.Response({'message': f"sertificate of user with email: {user.email} uploaded."}, status=rest_status.HTTP_201_CREATED)
+            return response.Response(cert_serializer.errors, status=rest_status.HTTP_400_BAD_REQUEST)
 
 
 

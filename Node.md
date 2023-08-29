@@ -18,3 +18,7 @@ Certificate file-ni upload edilmə mərhələsi
 
 
 # Filləri saxlamaq üçün ümumi database strukturunu qurmaq(done)
+
+
+
+# Certificate unique key-ni redis-ə əlavə edib yoxlamaq.

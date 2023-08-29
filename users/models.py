@@ -75,8 +75,9 @@ class UserAccountFilePage(models.Model):
         'users.UserAccount', models.CASCADE
     )
     file_category = models.CharField(max_length=20, choices=FileCategoryChoices.choices)
-    file_key = models.UUIDField(unique=True, editable=False)
+    
     file = models.FileField(upload_to=user_account_file_upload_path, blank=True, null=True) #TODO: delete blank=True, null=True
+    # date_crated = models.DateField(blank=True, null=True)
     class Meta:
         verbose_name = "UserAccountFilePage"
 
@@ -97,6 +98,7 @@ class ReportModel(models.Model):
     program_score = models.DecimalField(max_digits=16, decimal_places=13)
     program_color = models.CharField(max_length=30, default='#8800E0')
     date_created = models.DateTimeField(auto_now_add=True, blank=True, null=True) #TODO: delete blank=True, null=True
+    file_key = models.UUIDField(unique=True, editable=False, blank=True, null=True) #TODO: delete blank=True, null=True
 
     class Meta:
         verbose_name = "ReportModel"
@@ -113,17 +115,21 @@ class UserCV(models.Model):
     pass
 class CertificateModel(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    date_created = models.DateTimeField(auto_now_add=True)
-    certificate_file = models.OneToOneField(UserAccountFilePage, models.CASCADE, blank=True, null=True, related_name="certificate_file")
+    date_created = models.DateField(auto_now_add=True)
+    certificate_file = models.OneToOneField(UserAccountFilePage, models.CASCADE, blank=True, null=True, related_name="certificate_file") #TODO: delete blank=True, null=True
+    file_key = models.UUIDField(unique=True, editable=False, blank=True, null=True) #TODO: delete blank=True, null=True
+
     class Meta:
         verbose_name = 'CertificateModel'
         verbose_name_plural = 'CertificateModels'
     
     def __str__(self) -> str:
-        return self.user.email
+        if self.certificate_file.user.email is not None:
+            return self.certificate_file.user.email
 
 
 class UniqueRandom(models.Model):
+    user = models.ForeignKey('users.UserAccount', models.CASCADE, blank=True, null=True) #TODO: delete blank=True, null=True
     unique_value = models.CharField(max_length=32, unique=True)
     def __str__(self) -> str:
         return self.unique_value
@@ -139,7 +145,7 @@ def user_file_upload_path(instance, filename):
 class UserVerificationFile(models.Model):
     user = models.ForeignKey(UserAccount, on_delete=models.CASCADE)
     category = models.CharField(max_length=150)
-    file = models.FileField(upload_to=user_file_upload_path, null=True, blank=True)
+    file = models.FileField(upload_to=user_file_upload_path, null=True, blank=True) #TODO: delete blank=True, null=True
 
     class Meta:
         verbose_name = 'UserVerificationFile'
