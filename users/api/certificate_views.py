@@ -240,23 +240,18 @@ class UploadCertificateAPIView(APIView):
         with transaction.atomic():
             file_data = {'user': user.id, 'file': data_file, "file_category": "CERTIFICATE"}
             user_accout_serializer = user_account_file_serializers.UserAccountFilePageSerializer(data=file_data)
-            if user_accout_serializer.is_valid():
-                user_accout_file = user_accout_serializer.save()
-            else:
-                return response.Response(user_accout_serializer.errors, status=rest_status.HTTP_400_BAD_REQUEST)
-
             certificate_data = {
-                "file_key":request.data.get("file_key"),
-                "certificate_file": user_accout_file.id,
+                "file_key": request.data.get("file_key"),
                 "date_created": request.data.get("date_created")
             }
             cert_serializer = certificate_serializers.CertificateFileSerializer(data=certificate_data)
-            if cert_serializer.is_valid():
+            if user_accout_serializer.is_valid() and cert_serializer.is_valid():
+                user_accout_file = user_accout_serializer.save()
+                cert_serializer.validated_data['certificate_file'] = user_accout_file
                 cert_serializer.save()
-                return response.Response({'message': f"sertificate of user with email: {user.email} uploaded."}, status=rest_status.HTTP_201_CREATED)
-            return response.Response(cert_serializer.errors, status=rest_status.HTTP_400_BAD_REQUEST)
-
-
+                return response.Response({'message': f"Certificate of user with email: {user.email} uploaded."}, status=rest_status.HTTP_201_CREATED)
+            else:
+                return response.Response(user_accout_serializer.errors or cert_serializer.errors, status=rest_status.HTTP_400_BAD_REQUEST)
 
 
 class CreateUniqueCertificateValue(APIView):
