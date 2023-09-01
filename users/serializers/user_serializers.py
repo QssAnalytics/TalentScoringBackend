@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from django.conf import settings
 from django.contrib.auth import get_user_model
-from users.models import UserAccount, ReportModel, UserFile
+from users.models import UserAccount, ReportModel#, UserFile
 
 UserAccount=get_user_model()
 
@@ -58,6 +58,7 @@ class ReportSerializer(serializers.ModelSerializer):
 
     #     return value
 
+<<<<<<< HEAD
 class UserFileUploadSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserFile
@@ -80,3 +81,47 @@ class UserFileUploadSerializer(serializers.ModelSerializer):
             instance.save()
         
         return instance
+=======
+# class UserFileUploadSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = UserFile
+#         fields = ('user', 'category', 'file')
+
+#     def create(self, validated_data):
+#         user = validated_data['user']
+#         category = validated_data['category']
+#         file = validated_data['file']
+
+#         # Check if the category allows multiple files
+#         if category.allows_multiple_files and category.file_count >= 1:
+#             # Create a new UserFile instance for each uploaded file
+#             instances = [UserFile(user=user, category=category, file=uploaded_file) for uploaded_file in file]
+#             UserFile.objects.bulk_create(instances)
+#         else:
+#             # For categories that allow only one file, create or update the existing instance
+#             instance, created = UserFile.objects.get_or_create(user=user, category=category)
+#             instance.file = file[0]
+#             instance.save()
+        
+#         return instance
+from django.core.files.uploadedfile import InMemoryUploadedFile
+class CategoryFileSerializer(serializers.Serializer):
+    category = serializers.CharField(max_length=150)
+    file = serializers.FileField(allow_empty_file=False)
+
+class UserVerificationFileUploadSerializer(serializers.Serializer):
+    # def to_internal_value(self, data):
+    #     category_file_data = []
+    #     for category, files in data.lists():
+    #         category_file_data.append({'category': category, 'files': files})
+        
+    #     return category_file_data
+    
+
+    category = serializers.CharField(max_length=150) #for test
+    # file = serializers.FileField(allow_empty_file=False)
+    file = serializers.CharField(max_length=150) #for test
+    
+
+
+>>>>>>> testingbranch

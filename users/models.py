@@ -62,12 +62,29 @@ class UserAccount(AbstractBaseUser):
         
         return self.email
 
+def user_account_file_upload_path(instance, filename):
+    return f'{instance.file_category}/{filename}'
 
-class ReportModel(models.Model):
+class UserAccountFilePage(models.Model):
+    class FileCategoryChoices(models.TextChoices):
+        CV = "CV", "CV"
+        REPORT = "REPORT", "REPORT"
+        CERTIFICATE = "CERTIFICATE", "CERTIFICATE"
+
     user = models.ForeignKey(
         'users.UserAccount', models.CASCADE
     )
-    user_info = models.JSONField(blank=True, null=True)
+    file_category = models.CharField(max_length=20, choices=FileCategoryChoices.choices)
+    
+    file = models.FileField(upload_to=user_account_file_upload_path, blank=True, null=True) #TODO: delete blank=True, null=True
+    # date_crated = models.DateField(blank=True, null=True)
+    class Meta:
+        verbose_name = "UserAccountFilePage"
+
+class ReportModel(models.Model):
+
+    report_file = models.OneToOneField(UserAccountFilePage, models.CASCADE, blank=True, null=True, related_name="report_file") #TODO: delete blank=True, null=True
+    user_info = models.JSONField(blank=True, null=True) #TODO: delete blank=True, null=True
     education_score = models.DecimalField(max_digits=16, decimal_places=13)
     education_color = models.CharField(max_length=30, default='#00E5BC')
     language_score = models.DecimalField(max_digits=16, decimal_places=13)
@@ -80,8 +97,8 @@ class ReportModel(models.Model):
     work_experiance_color = models.CharField(max_length=30, default='#FFCB05')
     program_score = models.DecimalField(max_digits=16, decimal_places=13)
     program_color = models.CharField(max_length=30, default='#8800E0')
-
-    report_file = models.FileField(upload_to='images/', blank=True, null=True)
+    date_created = models.DateTimeField(auto_now_add=True, blank=True, null=True) #TODO: delete blank=True, null=True
+    file_key = models.UUIDField(unique=True, editable=False, blank=True, null=True) #TODO: delete blank=True, null=True
 
     class Meta:
         verbose_name = "ReportModel"
@@ -97,85 +114,40 @@ class ReportModel(models.Model):
 class UserCV(models.Model):
     pass
 class CertificateModel(models.Model):
-    user = models.ForeignKey(
-        'users.UserAccount', models.CASCADE
-    )
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    date_created = models.DateTimeField(auto_now_add=True)
-    
-    cert_file = models.FileField(upload_to='certificate/', blank=True, null=True)
-    cert_unique_key = models.CharField(max_length=32, unique=True, blank=True, null=True)
+    date_created = models.DateField(auto_now_add=True)
+    certificate_file = models.OneToOneField(UserAccountFilePage, models.CASCADE, blank=True, null=True, related_name="certificate_file") #TODO: delete blank=True, null=True
+    file_key = models.UUIDField(unique=True, editable=False, blank=True, null=True) #TODO: delete blank=True, null=True
 
     class Meta:
-        verbose_name = 'Certificate Model'
-        verbose_name_plural = 'Certificate Model'
+        verbose_name = 'CertificateModel'
+        verbose_name_plural = 'CertificateModels'
     
     def __str__(self) -> str:
-        return self.user.email
+        if self.certificate_file.user.email is not None:
+            return self.certificate_file.user.email
 
 
 class UniqueRandom(models.Model):
+    user = models.ForeignKey('users.UserAccount', models.CASCADE, blank=True, null=True) #TODO: delete blank=True, null=True
     unique_value = models.CharField(max_length=32, unique=True)
     def __str__(self) -> str:
         return self.unique_value
-
-class FileCategory(models.Model):
-    name = models.CharField(max_length=50)
-    file_count = models.PositiveIntegerField(default=0, editable=False)  # Field to store the file count
-    allows_multiple_files = models.BooleanField(default=False)
-    
-    def __str__(self):
-        return self.name
-
-def user_file_upload_path(instance, filename):
-    return f'user-files/{instance.user.email}/{instance.category.name}/{filename}'
-
-class UserFile(models.Model):
-    user = models.ForeignKey(UserAccount, on_delete=models.CASCADE)
-    category = models.ForeignKey(FileCategory, on_delete=models.CASCADE)
-    file = models.FileField(upload_to=user_file_upload_path, null=True, blank=True)
     
     class Meta:
-        verbose_name = 'User File'
-        verbose_name_plural = 'User Files'
+        verbose_name = 'UniqueRandom'
+        verbose_name_plural = 'UniqueRandoms'
     
-    def __str__(self):
-        return f"{self.user.email} - {self.category}"
-    
-    def save(self, *args, **kwargs):
-        # Increment the file count for the category when a new UserFile is created
-        if not self.pk: 
-            self.category.file_count += 1
-            self.category.save()
-        super().save(*args, **kwargs)
-    
-    def delete(self, *args, **kwargs):
-        # Decrement the file count for the category when a UserFile is deleted
-        self.category.file_count -= 1
-        self.category.save()
-        super().delete(*args, **kwargs)
+def user_file_upload_path(instance, filename):
+    return f'user-files/{instance.user.email}/{instance.category}/{filename}'
 
-# class UserFiles(models.Model):
-#     user = models.ForeignKey('users.UserAccount', models.CASCADE)
-#     passport = models.FileField(upload_to='user-files/passports/', blank=True, null=True)
-#     attestat9 = models.FileField(upload_to='user-files/attestat9/', blank=True, null=True)
-#     attestat11 = models.FileField(upload_to='user-files/attestat11/', blank=True, null=True)
-#     student_card = models.FileField(upload_to='user-files/student-cards/', blank=True, null=True)
-#     bachelor_diplom = models.FileField(upload_to='user-files/diplom/bachelor/', blank=True, null=True)
-#     master_diplom = models.FileField(upload_to='user-files/diplom/master/', blank=True, null=True)
-#     phd_diplom = models.FileField(upload_to='user-files/diplom/phd/', blank=True, null=True)
-#     olimp_sened = models.FileField(upload_to='user-files/olimpiad-docs/', blank=True, null=True)
-#     ielts = models.FileField(upload_to='user-files/language-certificates/ielts/', blank=True, null=True)
-#     toefl = models.FileField(upload_to='user-files/language-certificates/toefl/', blank=True, null=True) #10
-#     other_lang_cert = models.FileField(upload_to='user-files/language-certificates/other/', blank=True, null=True)
-#     experience_doc = models.FileField(upload_to='user-files/experience-docs/', blank=True, null=True)
-#     program_cert = models.FileField(upload_to='user-files/program-certificates/', blank=True, null=True)
-#     sport_cert = models.FileField(upload_to='user-files/sport-certificates/', blank=True, null=True)
-#     special_skills_doc = models.FileField(upload_to='user-files/special-skills-docs/', blank=True, null=True)
-    
-#     class Meta:
-#         verbose_name = 'User Files'
-#         verbose_name_plural = 'User Files'
-    
-#     def __str__(self) -> str:
-#         return self.user.email
+
+class UserVerificationFile(models.Model):
+    user = models.ForeignKey(UserAccount, on_delete=models.CASCADE)
+    category = models.CharField(max_length=150)
+    file = models.FileField(upload_to=user_file_upload_path, null=True, blank=True) #TODO: delete blank=True, null=True
+
+    class Meta:
+        verbose_name = 'UserVerificationFile'
+        verbose_name_plural = 'UserVerificationFiles'
+
