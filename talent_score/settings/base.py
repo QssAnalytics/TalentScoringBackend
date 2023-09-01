@@ -9,7 +9,7 @@ environ.Env.read_env()
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost','127.0.0.1','192.168.8.38', 'nazimbudaqli.pythonanywhere.com']
+ALLOWED_HOSTS = ['localhost','127.0.0.1','192.168.8.160', 'nazimbudaqli.pythonanywhere.com']
 SECRET_KEY = env("SECRET_KEY")
 
 INSTALLED_APPS = [

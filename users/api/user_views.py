@@ -606,18 +606,35 @@ class JobTitleAPIView(APIView):
         return Response({})
 
 class UserFilesAPIView(APIView):
-    # parser_classes = (MultiPartParser,)
     
     def post(self, request, *args, **kwargs):
-        serializer = user_serializers.UserVerificationFileUploadSerializer(data=request.data, many=True)
+        try:
+            user = UserAccount.objects.get(email='admin@mail.ru')  # Retrieve the user
+        except UserAccount.DoesNotExist:
+            return Response({'message': 'User not found'})
+        req_data = request.data
+
+        for item in req_data:
+            category = item['category']
+            file_data_base64 = item['file']
+            
+            existing_file = models.UserVerificationFile.objects.filter(user=user, category=category)
+            if existing_file.exists():
+                continue
+            
+            # file_data = base64.b64decode(file_data_base64)
+            format, imgstr = file_data_base64.split(';base64,') 
+            ext = format.split('/')[-1] 
+            file = ContentFile(base64.b64decode(imgstr), name='temp.' + ext)
+            data = {'user':user.id, 'category':category, 'file':file}
+            
+            serializer = user_serializers.UserVerificationFileUploadSerializer(data=data)
+            if serializer.is_valid():
+                serializer.save()
+            else:
+                return Response({"errors":serializer.errors}, status=rest_status.HTTP_400_BAD_REQUEST)
         
-        if serializer.is_valid():
-            uploaded_data = serializer.validated_data
-            print(uploaded_data)
-        #     try:
-        #         user = UserAccount.objects.get(email='tami@mail.ru')  # Retrieve the user
-        #     except UserAccount.DoesNotExist:
-        #         return Response({'message': 'User not found'})
+        return Response({'message': 'Files uploaded successfully'}, status=rest_status.HTTP_201_CREATED)
 
         #     for data in uploaded_data:
         #         category = data['category']
@@ -629,5 +646,4 @@ class UserFilesAPIView(APIView):
         #     return Response({'message': 'Files uploaded successfully'})
         # else:
         #     return Response(serializer.errors)
-        return Response({'message': 'Files uploaded successfully'})
-
+        # return Response({'message': 'Files uploaded successfully'})

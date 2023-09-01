@@ -1,7 +1,9 @@
 from rest_framework import serializers
 from django.conf import settings
 from django.contrib.auth import get_user_model
-from users.models import UserAccount, ReportModel#, UserFile
+from users.models import UserAccount, ReportModel, UserVerificationFile
+import base64
+from django.core.files.base import ContentFile
 
 UserAccount=get_user_model()
 
@@ -85,18 +87,34 @@ class CategoryFileSerializer(serializers.Serializer):
     category = serializers.CharField(max_length=150)
     file = serializers.FileField(allow_empty_file=False)
 
-class UserVerificationFileUploadSerializer(serializers.Serializer):
+class UserVerificationFileUploadSerializer(serializers.ModelSerializer):
     # def to_internal_value(self, data):
     #     category_file_data = []
     #     for category, files in data.lists():
     #         category_file_data.append({'category': category, 'files': files})
-        
+
     #     return category_file_data
-    
 
-    category = serializers.CharField(max_length=150) #for test
+    # category = serializers.CharField(max_length=150) #for test
     # file = serializers.FileField(allow_empty_file=False)
-    file = serializers.CharField(max_length=150) #for test
+
+    class Meta:
+        model = UserVerificationFile
+        fields = ('user','category', 'file')
     
 
+    # def save(self, **kwargs):
+    #     user = self.context.get('user')
+    #     file_objects = []
 
+    #     for item in self.validated_data:
+    #         category = item['category']
+    #         file_data_base64 = item['file']
+    #         file_data = base64.b64decode(file_data_base64)  # Decode base64 data
+    #         format, imgstr = file_data_base64.split(';base64,') 
+    #         ext = format.split('/')[-1] 
+    #         file = ContentFile(base64.b64decode(imgstr), name='temp.' + ext)
+    #         # print('file',file)
+    #         file_objects.append(UserVerificationFile(user=user, category=category, file=file))
+
+    #     return file_objects

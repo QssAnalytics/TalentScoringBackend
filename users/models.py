@@ -141,7 +141,6 @@ class UniqueRandom(models.Model):
 def user_file_upload_path(instance, filename):
     return f'user-files/{instance.user.email}/{instance.category}/{filename}'
 
-
 class UserVerificationFile(models.Model):
     user = models.ForeignKey(UserAccount, on_delete=models.CASCADE)
     category = models.CharField(max_length=150)
