@@ -191,6 +191,11 @@ class CertificateIntroAPIView(APIView):
             return response.choices[0].message.content
 
         certificate_intro_content = generate_certificate_intro_content()
+        if certificate_designation_content.endswith('.'):
+            # Do something if the last character is a dot.
+            # For example, remove the dot or handle it accordingly.
+            certificate_designation_content = certificate_designation_content[:-1]  # Remove the last character.
+
         return response.Response({"certificate-intro-content":certificate_intro_content}, status=rest_status.HTTP_200_OK)
     
 
