@@ -249,5 +249,232 @@
         }
       ]
     }
+  },
+  {
+    "name": "elave-dil-bilikleri-substage",
+    "formData": {
+      "langs": [
+        {
+          "addLang": {
+            "id": 133,
+            "answer": "İspan dili"
+          },
+          "levelLang": "B2 (Orta)",
+          "haveCertLang": "Xeyr"
+        },
+        {
+          "addLang": {
+            "id": 135,
+            "answer": "Yapon dili"
+          },
+          "levelLang": "B2 (Orta)",
+          "haveCertLang": "Bəli",
+          "certLang": "ead"
+        }
+      ]
+    }
+  },
+  {
+    "name": "xususi-bacariqlar-sertifikat-substage",
+    "formData": {
+      "musiqiCertifcate": "asdas",
+      "rəqsCertifcate": "asdasdas"
+    }
+  },
+  {
+    "name": "idman-substage",
+    "formData": {
+      "sport": {
+        "answer": "Bəli",
+        "weight": 0
+      },
+      "whichSport": [
+        "Futbol",
+        "Güləş",
+        "Basketbol",
+        "Atletika"
+      ],
+      "professionals": [
+        {
+          "whichScore": {
+            "answer": "Respublika",
+            "weight": 0.03
+          },
+          "whichPlace": {
+            "answer": "2-ci yer",
+            "weight": 0.2
+          },
+          "name": "Futbol",
+          "level": {
+            "answer": "Peşəkar",
+            "weight": 0.03
+          }
+        },
+        {
+          "whichScore": {
+            "answer": "Rayon",
+            "weight": 1
+          },
+          "whichPlace": {
+            "answer": "1-ci yer",
+            "weight": 0.1
+          },
+          "name": "Atletika",
+          "level": {
+            "answer": "Peşəkar",
+            "weight": 0.03
+          }
+        }
+      ],
+      "amateurs": [
+        {
+          "level": {
+            "answer": "Həvəskar",
+            "weight": 0.3
+          },
+          "name": "Güləş"
+        },
+        {
+          "level": {
+            "answer": "Həvəskar",
+            "weight": 0.3
+          },
+          "name": "Basketbol"
+        }
+      ]
+    }
+  },
+  {
+    "name": "proqram-bilikleri-substage",
+    "formData": {
+      "design": [
+        {
+          "answer": "Canva",
+          "weight": null,
+          "level": {
+            "answer": "Junior",
+            "weight": null
+          }
+        },
+        {
+          "answer": "Photoshop",
+          "weight": null,
+          "level": {
+            "answer": "Middle",
+            "weight": null
+          }
+        }
+      ],
+      "msOffice": [
+        {
+          "answer": "Word",
+          "weight": 1,
+          "level": {
+            "answer": "Middle",
+            "weight": 0.5
+          }
+        },
+        {
+          "answer": "Excel",
+          "weight": 0.2,
+          "level": {
+            "answer": "Junior",
+            "weight": 0.7
+          }
+        },
+        {
+          "answer": "PowerPoint",
+          "weight": 0.4,
+          "level": {
+            "answer": "Senior",
+            "weight": 0.3
+          }
+        }
+      ],
+      "programs": [
+        {
+          "answer": "Python",
+          "weight": null,
+          "level": {
+            "answer": "Middle",
+            "weight": null
+          }
+        },
+        {
+          "answer": "Java",
+          "weight": null,
+          "level": {
+            "answer": "Middle",
+            "weight": null
+          }
+        },
+        {
+          "answer": "Kotlin",
+          "weight": null,
+          "level": {
+            "answer": "Middle",
+            "weight": null
+          }
+        },
+        {
+          "answer": "C/C++",
+          "weight": null,
+          "level": {
+            "answer": "Middle",
+            "weight": null
+          }
+        },
+        {
+          "answer": "C#",
+          "weight": null,
+          "level": {
+            "answer": "Middle",
+            "weight": null
+          }
+        },
+        {
+          "answer": "SQL",
+          "weight": null,
+          "level": {
+            "answer": "Middle",
+            "weight": null
+          }
+        },
+        {
+          "answer": "Javascript",
+          "weight": null,
+          "level": {
+            "answer": "Middle",
+            "weight": null
+          }
+        },
+        {
+          "answer": "Swift",
+          "weight": null,
+          "level": {
+            "answer": "Middle",
+            "weight": null
+          }
+        },
+        {
+          "answer": "HTML/CSS",
+          "weight": null,
+          "level": {
+            "answer": "Middle",
+            "weight": null
+          }
+        }
+      ],
+      "others": [
+        {
+          "answer": "Blender",
+          "weight": null,
+          "level": {
+            "answer": "Junior",
+            "weight": null
+          }
+        }
+      ]
+    }
   }
 ]
